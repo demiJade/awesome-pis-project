@@ -1,0 +1,278 @@
+[
+	{
+		"name": "basic_view",
+		"fields": {
+			"filled_fields": [
+				"MType",
+				"Matdesc",
+				"MatGrp",
+				"ProdH"
+			],
+			"default_fields": [
+				"Lang",
+				"BUn",
+				"OldMaterial",
+				"ExMatGrp",
+				"Xplnt",
+				"ValidFrm",
+				"GrWt",
+				"WUN",
+				"NetWt",
+				"Vol",
+				"VUN",
+				"EANUPC",
+				"CT",
+				"GrPMt",
+				"TLC",
+				"MatDesc2",
+				"VarStruct",
+				"ProdVariant"
+			]
+		}
+	}, {
+		"name": "acct",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType",
+				"ValCls",
+				"StandardPrice"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"MovAvgPrice"
+			]
+		}
+	}, {
+		"name": "cost",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType"
+			],
+			"default_fields": [
+				"IndSector",
+				"Plant"
+			]
+		}
+	}, {
+		"name": "gen",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SLoc",
+				"SC",
+				"HazMat",
+				"PerInd",
+				"NS"
+			]
+		}
+	}, {
+		"name": "MRP",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MTYPE",
+				"ABC",
+				"ValidFrom"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SLoc",
+				"MRPGroup",
+				"MMPP",
+				"MRPType",
+				"PlanningTimeFence",
+				"MRPController",
+				"LotSize",
+				"RoundingValue",
+				"ProcType",
+				"SpecProc",
+				"SLoc1",
+				"InHouseProd",
+				"PlanDelTime",
+				"GRT",
+				"Schedule",
+				"SafetyStock",
+				"SafetyTimeIndicat",
+				"SafetyTimeActCover",
+				"PI",
+				"SG",
+				"ConsumptionModule",
+				"BackwardConsumptionPer",
+				"ForwardConsumptionPer",
+				"AV",
+				"EfDate",
+				"FFMat"
+			]
+		}
+	}, {
+		"name": "purchase",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType",
+				"Orig"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"OUn",
+				"PGr",
+				"PVKey",
+				"I1",
+				"SourceList",
+				"CodeNo",
+				"CasNo"
+			]
+		}
+	}, {
+		"name": "sales_org",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType",
+				"ValidFrom",
+				"MATSTATGRP",
+				"MG1",
+				"MG2",
+				"Orig"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SOrg",
+				"DChnl",
+				"OUn",
+				"St",
+				"Plnt",
+				"CDc",
+				"AAG",
+				"tax",
+				"MinOrder",
+				"Marked",
+				"TGroup",
+				"LGrp"
+			]
+		}
+	}, {
+		"name": "storage",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"MType",
+				"something",
+				"NS"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SC",
+				"HazMat",
+				"PerInd"
+			]
+		}
+	}, {
+		"name": "pir",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"VendorMaterialCode",
+				"COO",
+				"FOB",
+				"Curr",
+				"ValidOn",
+				"FREIGHT",
+				"CUSTOMS",
+				"ROYALTY",
+				"STICKERING"
+			],
+			"default_fields": [
+				"Vendor",
+				"PurchaseOrg",
+				"Plnt",
+				"OUn",
+				"Denom",
+				"PIREq",
+				"PDT",
+				"PGrp",
+				"StandardQty",
+				"UnderdelTol",
+				"OverDelTol",
+				"ARq",
+				"Unlimited",
+				"Ctr",
+				"Tx",
+				"GRIV",
+				"IncoT",
+				"Inco2",
+				"ValidTo",
+				"CondType",
+				"RateUnit",
+				"CondPrc",
+				"CondUnit",
+				"CondType1",
+				"RateUnit1",
+				"CondPrc1",
+				"CondUnit1",
+				"CondType2",
+				"RateUnit2",
+				"CondPrc2",
+				"CondUnit2",
+				"CondType3",
+				"RateUnit3",
+				"CondPrc3",
+				"CondUnit3"
+			]
+		}
+	}, {
+		"name": "source_list",
+		"fields": {
+			"filled_fields": [
+				"Material",
+				"ValidFrom"
+			],
+			"default_fields": [
+				"Plnt",
+				"CounterVendor",
+				"ValidTo",
+				"Vendor",
+				"POrg",
+				"FVd"
+			]
+		},
+		"catalog": {
+			"filled_fields": [
+				"ListPrice",
+				"ValidFrom",
+				"Material"
+			],
+			"default_fields": [
+				"SalesOrg",
+				"DChnl",
+				"ValidTo"
+			]
+		}
+	}, {
+		"name": "rsp",
+		"fields": {
+			"filled_fields": [
+				"RSP",
+				"ValidFrom",
+				"Material"
+			],
+			"default_fields": [
+				"SalesOrg",
+				"DChnl",
+				"ValidTo"
+			]
+		}
+	}
+]
