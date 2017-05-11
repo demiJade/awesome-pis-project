@@ -1,0 +1,37 @@
+[
+	{
+		"role": "creator",
+		"fields": [
+			"vendor_material_code",
+			"description",
+			"sap_code",
+			"material_type",
+			"material_group",
+			"mpg1",
+			"vendor",
+			"country_oforigin",
+			"fob_price",
+			"fob_currency",
+			"freight_cost",
+			"customs",
+			"royalty",
+			"stickering_cost",
+			"currency"
+		]
+	},
+	{
+		"role": "mm",
+		"fields": [
+			"product_hierarchy",
+			"srp",
+			"list_price",
+			"abc_class"
+		]
+	},
+	{
+		"role": "bc",
+		"fields": [
+			"standard_cost"
+		]
+	}
+]

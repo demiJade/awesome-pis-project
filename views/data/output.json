@@ -1,0 +1,803 @@
+[
+    {
+        "name": "basic_view",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field" 
+            },
+            "Lang": {
+                "value": "",
+                "type": "default_field"
+            },
+            "Matdesc": {
+                "value": "description",
+                "type": "filled_field"
+            },
+            "BUn": {
+                "value": "",
+                "type": "default_field"
+            },
+            "MatGrp": {
+                "value": "material_group",
+                "type": "filled_field"
+            },
+            "OldMaterial": {
+                "value": "",
+                "type": "default_field"
+            },
+            "ExMatGrp": {
+                "value": "",
+                "type": "default_field"
+            },
+            "something": {
+                "value": "new_save",
+                "type": "filled_field"
+            },
+            "ProdH": {
+                "value": "product_hierarchy",
+                "type": "filled_field"
+            },
+            "Xplnt": {
+                "value": "",
+                "type": "default_field"
+            },
+            "ValidFrm": {
+                "value": "",
+                "type":"default_field"
+            },
+            "GrWt": {
+                "value": "",
+                "type":"default_field"
+            },
+            "WUN": {
+                "value": "",
+                "type":"default_field"
+            },
+            "NetWt": {
+                "value": "",
+                "type":"default_field"
+            },
+            "Vol": {
+                "value": "",
+                "type":"default_field"
+            },
+            "VUN": {
+                "value": "",
+                "type":"default_field"
+            },
+            "EANUPC": {
+                "value": "",
+                "type":"default_field"
+            },
+            "CT": {
+                "value": "",
+                "type":"default_field"
+            },
+            "GrPMt": {
+                "value": "",
+                "type":"default_field"
+            },
+            "TLC": {
+                "value": "",
+                "type":"default_field"
+            },
+            "MatDesc2": {
+                "value": "",
+                "type":"default_field"
+            },
+            "VarStruct": {
+                "value": "",
+                "type":"default_field"
+            },
+            "ProdVariant": {
+                "value": "",
+                "type":"default_field"
+            }           
+
+        }
+    },
+    {
+        "name": "acct",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "ValCls": {
+                "value": "3100",
+                "type": "default_field"
+            },
+            "MovAvgPrice": {
+                "value": "0",
+                "type": "default_field"
+            },
+            "StandardPrice": {
+                "value": "standard_cost",
+                "type": "filled_field"
+            }
+        }
+    },
+    {
+        "name": "cost",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "IndSector": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            }
+        }
+    },
+    {
+        "name": "gen",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "SLoc": {
+                "value": "PL01",
+                "type": "default_field"
+            },
+            "SC": {
+                "value": "Z1",
+                "type": "default_field"
+            },
+            "HazMat": {
+                "value": "",
+                "type": "default_field"
+            },
+            "PerInd": {
+                "value": "D",
+                "type": "default_field"
+            },
+            "NS": {
+                "value": "",
+                "type": "default_field"
+            }
+        }
+    },
+    {
+        "name": "MRP",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                    "value": "C",
+                    "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "SLoc": {
+                "value": "PL01",
+                "type": "default_field"
+            },
+            "MRPGroup": {
+                "value": "YFP1",
+                "type": "default_field"
+            },
+            "ABC": {
+                "value": "abc_class",
+                "type": "filled_field"
+            },
+            "MMPP": {
+                "value": "20",
+                "type": "default_field"
+            },
+            "ValidFrom": {
+                "value": "today",
+                "type": "filled_field"
+            },
+            "MRPType": {
+                "value": "PD",
+                "type": "default_field"
+            },
+            "PlanningTimeFence": {
+                "value": "0",
+                "type": "default_field"
+            },
+            "MRPController": {
+                "value": "001",
+                "type": "default_field"
+            },
+            "LotSize": {
+                "value": "MB",
+                "type": "default_field"
+            },
+            "RoundingValue": {
+                "value": "1",
+                "type": "default_field"
+            },
+            "ProcType": {
+                "value": "F",
+                "type": "default_field"
+            },
+            "SpecProc": {
+                "value": "",
+                "type": "default_field"
+            },
+            "SLoc1": {
+                "value": "PL01",
+                "type": "default_field"
+            },
+            "InHouseProd": {
+                "value": "",
+                "type": "default_field"
+            },
+            "PlanDelTime": {
+                "value": "",
+                "type": "default_field"
+            },
+            "GRT": {
+                "value": "3",
+                "type": "default_field"
+            },
+            "Schedule": {
+                "value": "000",
+                "type": "default_field"
+            },
+            "SafetyStock": {
+                "value": "0",
+                "type": "default_field"
+            },
+            "SafetyTimeIndicat": {
+                "value": "2",
+                "type": "default_field"
+            },
+            "SafetyTimeActCover": {
+                "value": "22",
+                "type": "default_field"
+            },
+            "PI": {
+                "value": "M",
+                "type": "default_field"
+            },
+            "SG": {
+                "value": "40",
+                "type": "default_field"
+            },
+            "ConsumptionModule": {
+                "value": "2",
+                "type": "default_field"
+            },
+            "BackwardConsumptionPer": {
+                "value": "22",
+                "type": "default_field"
+            },
+            "ForwardConsumptionPer": {
+                "value": "22",
+                "type": "default_field"
+            },
+            "AV": {
+                "value": "02",
+                "type": "default_field"
+            },
+            "EfDate": {
+                "value": "",
+                "type": "default_field"
+            },
+            "FFMat": {
+                "value": "",
+                "type": "default_field"
+            }
+        }
+    },
+    {
+        "name": "purchase",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "OUn": {
+                "value": "",
+                "type": "default_field"
+            },
+            "PGr": {
+                "value": "P01",
+                "type": "default_field"
+            },
+            "PVKey": {
+                "value": "YIG1",
+                "type": "default_field"
+            },
+            "I1": {
+                "value": "",
+                "type": "default_field"
+            },
+            "SourceList": {
+                "value": "X",
+                "type": "default_field"
+            },
+            "CodeNo": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CasNo": {
+                "value": "",
+                "type": "default_field"
+            },
+            "Orig": {
+                "value": "country_of_origin",
+                "type": "filled_field"
+            }
+        }
+    },
+    {
+        "name": "sales_org",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "SOrg": {
+                "value": "P100",
+                "type": "default_field"
+            },
+            "DChnl": {
+                "value": "02",
+                "type": "default_field"
+            },
+            "OUn": {
+                "value": "",
+                "type": "default_field"
+            },
+            "St": {
+                "value": "20",
+                "type": "default_field"
+            },
+            "ValidFrom": {
+                "value": "today",
+                "type": "filled_field"
+            },
+            "Plnt": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "CDc": {
+                "value": "X",
+                "type": "default_field"
+            },
+            "MATSTATGRP": {
+                "value": "formula",
+                "type": "filled_field"
+            },
+            "AAG": {
+                "value": "01",
+                "type": "default_field"
+            },
+            "ItCGr": {
+                "value": "",
+                "type": "filled_field"
+            },
+            "tax": {
+                "value": "1",
+                "type": "default_field"
+            },
+            "MinOrder": {
+                "value": "0",
+                "type": "default_field"
+            },
+            "MG1": {
+                "value": "formula",
+                "type": "filled_field"
+            },
+            "MG2": {
+                "value": "formula",
+                "type": "filled_field"
+            },
+            "Marked": {
+                "value": "",
+                "type": "default_field"
+            },
+            "TGroup": {
+                "value": "001",
+                "type": "default_field"
+            },
+            "LGrp": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "Orig": {
+                "value": "country_of_origin",
+                "type": "filled_field"
+            } 
+        }
+    },
+    {
+        "name": "storage",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "I": {
+                "value": "C",
+                "type": "default_field"
+            },
+            "MType": {
+                "value": "material_type",
+                "type": "filled_field"
+            },
+            "Plant": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "something": {
+                "value": "something",
+                "type": "filled_field"
+            },
+            "SC": {
+                "value": "SC",
+                "type": "default_field"
+            },
+            "HazMat": {
+                "value": "",
+                "type": "default_field"
+            },
+            "PerInd": {
+                "value": "D",
+                "type": "default_field"
+            },
+            "NS": {
+                "value": "X",
+                "type": "filled_field"
+            }
+        }
+    },
+    {
+        "name": "pir",
+        "fields": {
+            "Vendor": {
+                "value": "CDF160",
+                "type": "default_field"
+            },
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "PurchaseOrg": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "Plnt": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "VendorMaterialCode": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "COO": {
+                "value": "country_of_origin",
+                "type": "filled_field"
+            },
+            "OUn": {
+                "value": "UN",
+                "type": "default_field"
+            },
+            "Denom": {
+                "value": "1",
+                "type": "default_field"
+            },
+            "PIREq": {
+                "value": "1",
+                "type": "default_field"
+            },
+            "PDT": {
+                "value": "14",
+                "type": "default_field"
+            },
+            "PGrp": {
+                "value": "P01",
+                "type": "default_field"
+            },
+            "StandardQty": {
+                "value": "1",
+                "type": "default_field"
+            },
+            "UnderdelTol": {
+                "value": "99",
+                "type": "default_field"
+            },
+            "OverDelTol": {
+                "value": "0",
+                "type": "default_field"
+            },
+            "ARq": {
+                "value": "X",
+                "type": "default_field"
+            },
+            "Unlimited": {
+                "value": "X",
+                "type": "default_field"
+            },
+            "Ctr": {
+                "value": "Y002",
+                "type": "default_field"
+            },
+            "Tx": {
+                "value": "P0",
+                "type": "default_field"
+            },
+            "GRIV": {
+                "value": "",
+                "type": "default_field"
+            },
+            "FOB": {
+                "value": "fob_price",
+                "type": "filled_field"
+            },
+            "Curr": {
+                "value": "fob_currency",
+                "type": "filled_field"
+            },
+            "IncoT": {
+                "value": "FOB",
+                "type": "default_field"
+            },
+            "Inco2": {
+                "value": "FOB Country of Origin",
+                "type": "default_field"
+            },
+            "ValidOn": {
+                "value": "today",
+                "type": "filled_field"
+            },
+            "ValidTo": {
+                "value": "31129999",
+                "type": "default_field"
+            },
+            "CondType": {
+                "value": "FRA1",
+                "type": "default_field"
+            },
+            "FREIGHT": {
+                "value": "freight_cost",
+                "type": "filled_field"
+            },
+            "RateUnit": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondPrc": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondUnit": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondType1": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CUSTOMS": {
+                "value": "customs",
+                "type": "filled_field"
+            },
+            "RateUnit1": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondPrc1": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondUnit1": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondType2": {
+                "value": "ZRY1",
+                "type": "default_field"
+            },
+            "ROYALTY": {
+                "value": "royalty",
+                "type": "filled_field"
+            },
+            "RateUnit2": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondPrc2": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondUnit2": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondType3": {
+                "value": "ZST2",
+                "type": "default_field"
+            },
+            "STICKERING": {
+                "value": "stickering_cost",
+                "type": "filled_field"
+            },
+            "RateUnit3": {
+                "value": "PHP",
+                "type": "default_field"
+            },
+            "CondPrc3": {
+                "value": "",
+                "type": "default_field"
+            },
+            "CondUnit3": {
+                "value": "",
+                "type": "default_field"
+            }
+        }
+    },
+    {
+        "name": "source_list",
+        "fields": {
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            },
+            "Plnt": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "CounterVendor": {
+                "value": "",
+                "type": "default_field"
+            },
+            "ValidFrom": {
+                "value": "today",
+                "type": "filled_field"
+            },
+            "ValidTo": {
+                "value": "31129999",
+                "type": "default_field"
+            },
+            "Vendor": {
+                "value": "CDF160",
+                "type": "default_field"
+            },
+            "POrg": {
+                "value": "P001",
+                "type": "default_field"
+            },
+            "FVd": {
+                "value": "X",
+                "type": "default_field"
+            }
+        }
+    },
+    {
+        "name": "catalog",
+        "fields": {
+            "SalesOrg": {
+                "value": "P100",
+                "type": "default_field"
+            },
+            "DChnl": {
+                "value": "02",
+                "type": "default_field"
+            },
+            "ListPrice": {
+                "value": "list_price",
+                "type": "filled_field"
+            },
+            "ValidFrom": {
+                "value": "today",
+                "type": "filled_field"
+            },
+            "ValidTo": {
+                "value": "31.12.9999",
+                "type": "default_field"
+            },
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_field"
+            }
+        }
+    },
+    {
+        "name": "rsp",
+        "fields": {
+            "SalesOrg": {
+                "value": "P100",
+                "type": "default_fields"
+            },
+            "DChnl": {
+                "value": "02",
+                "type": "default_fields"
+            },
+            "RSP": {
+                "value": "srp",
+                "type": "filled_fields"
+            },
+            "ValidFrom": {
+                "value": "today",
+                "type": "filled_fields"
+            },
+            "ValidTo": {
+                "value": "31.12.9999",
+                "type": "default_fields"
+            },
+            "Material": {
+                "value": "sap_code",
+                "type": "filled_fields"
+            }
+        }
+    }
+]

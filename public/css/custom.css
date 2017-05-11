@@ -1,0 +1,43 @@
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile, .inputfile-label {
+    font-size: 1.20em;
+    font-weight: 700;
+    height: 40px;
+    color: white;
+    background-color: #353847;
+    display: inline-block;
+    padding: 8px;
+    margin-bottom: 10px;
+    float: left
+}
+
+.inputfile:focus, .inputfile-label:hover {
+    background-color: rgba(53, 56, 71, 0.88);
+    cursor: pointer;
+    
+}
+
+.inputfile:focus, .inputfile-label:focus{
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+.modal-body {
+    width: auto;
+    overflow: auto;
+    padding:20px;
+    height: auto;
+}
+
+.scrollable-table {
+    width: auto;
+    overflow: auto;
+}

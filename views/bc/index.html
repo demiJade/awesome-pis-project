@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Product Information System
+	</title>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- 	<div id="app" class="container-fluid">
+		
+		<div class="col-sm-2 col-md-2 dashboard-nav">
+			<nav class="navbar navbar-default navbar-fixed navbar-inverse">
+				<ul class="nav ">
+					<img src="../pictures/Assistant_logo.jpg">
+	        		<li class="dashboard-menu"><router-link to="/"><span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;WSL Calculator</router-link></li>
+					<li class="dashboard-menu"><router-link to="/promo"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;Promo List</router-link></li>
+					<li class="dashboard-menu"><router-link to="/reports"><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;Reports</router-link>
+					</li>
+					<div id="user">
+						<p>&nbsp;Logged in {{user.username | appendAs}}</p>
+						&nbsp;<a id="logout-link" href="/logout">Logout</a>
+					</div>
+				</ui>
+	    	</nav>
+		</div>
+		<div class="col-sm-10 col-md-10 page-content">
+			
+				<router-view></router-view>
+			
+		</div>
+	</div>
+	<div id="homepage">
+		
+	</div> -->
+	
+	<div class="container" id="app">
+		<h1>PIS File Parser</h1>
+		<div>
+			<div class="form-group">
+				<label for="raw-data" >Import Raw File</label>
+				<input type="file" id="raw-data" v-on:change="readData()">
+			</div>
+			<label>Role</label>
+	        <select name="role" id="division" class="form-control" v-model="batch.division">
+	          <option value="cpd">Consumer Products Division</option>
+	          <option value="ppd">Professional Products Division</option>
+	          <option value="lpd">Luxury Products Division</option>
+	        </select>
+	        <input type="text" id="raw-data" class="form-control" v-model="batch.brand">
+		</div>
+		<br>
+		<div>
+			<button class="btn btn-default" v-on:click="saveBatch()">Create</button>
+			<br>
+			<br>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Batch #</th>
+					<th>Created By</th>
+					<th>Created On</th>
+					<th>Marketing Confirm</th>
+					<th>BC Confirm</th>
+					<th>Extracted On</th>
+					<th>Division</th>
+					<th>Brand</th>
+					<th>Days Pending</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(batch, index) in batches">
+					<td>{{index + 1}}</td>
+					<td>{{batch.created_by}}</td>
+					<td>{{batch.created_on}}</td>
+					<td>{{batch.marketing_approved}}</td>
+					<td>{{batch.bc_approved}}</td>
+					<td>{{batch.extracted_on}}</td>
+					<td>{{batch.division}}</td>
+					<td>{{batch.brand}}</td>
+					<td>{{new Date() - batch.created_on}}</td>
+					<td>
+						<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
+							View
+						</button>
+						<button class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)">Delete Batch</button>
+						<!-- <button v-on:click="view(batch, index)">
+							go to view link
+						</button> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="modal fade" v-for="(batch, batch_index) in batches" :id="batch_index | openModal" tabindex="-1" role="dialog" :aria-labelledby="batch_index | openModalLabel">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Batch {{batch_index + 1}}</h4>
+		      </div>
+		      <div class="modal-body">
+		        <table class="table">
+		        	<thead>
+		        		<tr v-for="(item, item_index) in batch.items" v-if="item_index == 0">
+		        			<th v-for="(value, key) in item">{{key}}</th>
+		        		</tr>
+		        	</thead>
+		        	<tbody>
+		        		<tr v-for="item in batch.items">
+		        			<td v-for="(value, key) in item">
+		        				<p v-if="edit == false || views[0].fields[key].bc_editable == false"> {{value}} </p>
+		        				<input class="form-control" v-if="edit==true && views[0].fields[key].bc_editable == true" type="text" :name="value" v-model="item[key]">
+		        			</td>
+		        		</tr>
+		        	</tbody>
+		        </table>
+		      </div>
+		      <div class="modal-footer">
+		      	<button type="button" class="btn btn-success" v-on:click="setBCApproved(batch_index)">Confirm</button>
+		      	<button type="button" class="btn btn-default" v-on:click="makeEditable()">Edit</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" v-on:click="saveEdit(batch_index)">Save changes</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+
+		<!-- <div v-for="batch in batches">
+			<div class="panel panel-default">
+			 	<div class="panel-heading">
+			    	<h3 class="panel-title">Panel title</h3>
+			 	</div>
+			 	<div class="panel-body">
+			    	Panel content
+			 	</div>
+			</div>
+		</div> -->
+	</div>
+		
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+	<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script type="text/javascript" src="jszip/dist/jszip.js"></script>
+	<script src="js/dp/vue-app.js"></script>
+	<script type="text/javascript" src="bc/app.js"></script>
+	<script type="text/javascript" src="js/filters.js"></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript">
+		// $('#raw-data').change(function(event){
+		// 	readData(event);
+		// });
+		$("#download-data").click(function(event){
+			downloadData();
+		});
+		$.getJSON( "data/output.json", function( data ) {
+			$.each( data, function(i, values) {
+			  	views.push(data[i]);
+			});
+		});
+		$.ajax({
+			url: '/getbatches',
+			type: 'GET',
+			success: function(data){
+				data.forEach(function(batch){
+					batches.push(batch);
+				});
+			}
+		});
+		$.ajax({
+			url: '/getuser',
+			type: 'GET',
+			success: function(data){
+				for (field in data){
+					user[field] = data[field];
+				}
+			}
+		});
+
+	</script>
+</body>
+</html>

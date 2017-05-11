@@ -1,0 +1,32 @@
+{
+  "name": "pis",
+  "version": "1.0.0",
+  "description": "Product Information System",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://demiJade@gitlab.com/demiJade/awesome-pis-project.git"
+  },
+  "author": "Judy Sy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/demiJade/awesome-pis-project/issues"
+  },
+  "dependencies": {
+    "express": "*",
+    "mongodb": "*",
+    "underscore": "*",
+    "body-parser": "*",
+    "express-session": "*",
+    "morgan": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "body-parser": "*",
+    "bcryptjs": "*",
+    "cookie-parser": "*"
+  },
+  "homepage": "https://gitlab.com/demiJade/awesome-pis-project#README"
+}

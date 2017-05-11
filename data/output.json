@@ -1,0 +1,279 @@
+[
+	{
+		"name": "basic_view",
+		"fields": {
+			"filled_fields": {
+				"MType":"material_type",
+				"Matdesc":"description",
+				"MatGrp":"material_group",
+				"ProdH":"product_hierarchy"
+			},
+			"default_fields": {
+				"Lang": "",
+				"BUn": "",
+				"OldMaterial":"",
+				"ExMatGrp":"",
+				"Xplnt":"",
+				"ValidFrm":"",
+				"GrWt":"",
+				"WUN":"",
+				"NetWt":"",
+				"Vol":"",
+				"VUN":"",
+				"EANUPC":"",
+				"CT":"",
+				"GrPMt":"",
+				"TLC":"",
+				"MatDesc2":"",
+				"VarStruct":"",
+				"ProdVariant":""
+			}
+		}
+	}, {
+		"name": "acct",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type",
+				"StandardPrice":"standard_cost"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"ValCls":"3100",
+				"MovAvgPrice":"0"
+				}
+		}
+	}, {
+		"name": "cost",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type"
+			},
+			"default_fields": {
+				"IndSector":"C",
+				"Plant":"P001"
+			}
+		}
+	}, {
+		"name": "gen",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"SLoc":"PL01",
+				"SC":"Z1",
+				"HazMat":"",
+				"PerInd":"D",
+				"NS":""
+			}
+		}
+	}, {
+		"name": "MRP",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type",
+				"ABC":"abc_class",
+				"ValidFrom":"today"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"SLoc":"PL01",
+				"MRPGroup":"YFP1",
+				"MMPP":"20",
+				"MRPType":"PD",
+				"PlanningTimeFence":"0",
+				"MRPController":"001",
+				"LotSize":"MB",
+				"RoundingValue":"1",
+				"ProcType":"F",
+				"SpecProc":"",
+				"SLoc1":"PL01",
+				"InHouseProd":"",
+				"PlanDelTime":"",
+				"GRT":"3",
+				"Schedule":"000",
+				"SafetyStock":"0",
+				"SafetyTimeIndicat":"2",
+				"SafetyTimeActCover":"22",
+				"PI":"M",
+				"SG":"40",
+				"ConsumptionModule":"2",
+				"BackwardConsumptionPer":"22",
+				"ForwardConsumptionPer":"22",
+				"AV":"02",
+				"EfDate":"",
+				"FFMat":""
+			}
+		}
+	}, {
+		"name": "purchase",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type",
+				"Orig":"country_of_origin"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"OUn":"",
+				"PGr":"P01",
+				"PVKey":"YIG1",
+				"I1":"",
+				"SourceList":"X",
+				"CodeNo":"",
+				"CasNo":""
+			}
+		}
+	}, {
+		"name": "sales_org",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type",
+				"ValidFrom":"today",
+				"MATSTATGRP":"formula",
+				"ItCGr":"",
+				"MG1":"formula",
+				"MG2":"formula",
+				"Orig":"country_of_origin"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"SOrg":"P100",
+				"DChnl":"02",
+				"OUn":"",
+				"St":"20",
+				"Plnt":"P001",
+				"CDc":"X",
+				"AAG":"01",
+				"tax":"1",
+				"MinOrder":"0",
+				"Marked":"",
+				"TGroup":"001",
+				"LGrp":"P001"
+			}
+		}
+	}, {
+		"name": "storage",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"MType":"material_type",
+				"something":"something",
+				"NS":"X"
+			},
+			"default_fields": {
+				"I":"C",
+				"Plant":"P001",
+				"SC":"SC",
+				"HazMat":"",
+				"PerInd":"D"
+			}
+		}
+	}, {
+		"name": "pir",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"VendorMaterialCode":"sap_code",
+				"COO":"country_of_origin",
+				"FOB":"fob_price",
+				"Curr":"fob_currency",
+				"ValidOn":"today",
+				"FREIGHT":"freight_cost",
+				"CUSTOMS":"customs",
+				"ROYALTY":"royalty",
+				"STICKERING":"stickering_cost"
+			},
+			"default_fields": {
+				"Vendor":"CDF160",
+				"PurchaseOrg":"P001",
+				"Plnt":"P001",
+				"OUn":"UN",
+				"Denom":"1",
+				"PIREq":"1",
+				"PDT":"14",
+				"PGrp":"P01",
+				"StandardQty":"1",
+				"UnderdelTol":"99",
+				"OverDelTol":"0",
+				"ARq":"X",
+				"Unlimited":"X",
+				"Ctr":"Y002",
+				"Tx":"P0",
+				"GRIV":"",
+				"IncoT":"FOB",
+				"Inco2":"FOB Country of Origin",
+				"ValidTo":"31129999",
+				"CondType":"FRA1",
+				"RateUnit":"",
+				"CondPrc":"",
+				"CondUnit":"",
+				"CondType1":"",
+				"RateUnit1":"",
+				"CondPrc1":"",
+				"CondUnit1":"",
+				"CondType2":"ZRY1",
+				"RateUnit2":"",
+				"CondPrc2":"",
+				"CondUnit2":"",
+				"CondType3":"ZST2",
+				"RateUnit3":"PHP",
+				"CondPrc3":"",
+				"CondUnit3":""
+			}
+		}
+	}, {
+		"name": "source_list",
+		"fields": {
+			"filled_fields": {
+				"Material":"sap_code",
+				"ValidFrom":"today"
+			},
+			"default_fields": {
+				"Plnt":"P001",
+				"CounterVendor":"",
+				"ValidTo":"31129999",
+				"Vendor":"CDF160",
+				"POrg":"P001",
+				"FVd":"X"
+			}
+		},
+		"catalog": {
+			"filled_fields": {
+				"ListPrice":"list_price",
+				"ValidFrom":"today",
+				"Material":"sap_code"
+			},
+			"default_fields": {
+				"SalesOrg":"P100",
+				"DChnl":"02",
+				"ValidTo":"31.12.9999"
+			}
+		}
+	}, {
+		"name": "rsp",
+		"fields": {
+			"filled_fields": {
+				"RSP":"srp",
+				"ValidFrom":"today",
+				"Material":"sap_code"
+			},
+			"default_fields": {
+				"SalesOrg":"P100",
+				"DChnl":"02",
+				"ValidTo":"31.12.9999"
+			}
+		}
+	}
+]
