@@ -2,36 +2,37 @@
 	{
 		"name": "basic_view",
 		"fields": {
-			"filled_fields": {
-				"MType":"material_type",
-				"Matdesc":"description",
-				"MatGrp":"material_group",
-				"ProdH":"product_hierarchy"
-			},
-			"default_fields": {
-				"Lang": "",
-				"BUn": "",
-				"OldMaterial":"",
-				"ExMatGrp":"",
-				"Xplnt":"",
-				"ValidFrm":"",
-				"GrWt":"",
-				"WUN":"",
-				"NetWt":"",
-				"Vol":"",
-				"VUN":"",
-				"EANUPC":"",
-				"CT":"",
-				"GrPMt":"",
-				"TLC":"",
-				"MatDesc2":"",
-				"VarStruct":"",
-				"ProdVariant":""
-			}
+			"filled_fields": [
+				"MType",
+				"Matdesc",
+				"MatGrp",
+				"ProdH"
+			],
+			"default_fields": [
+				"Lang",
+				"BUn",
+				"OldMaterial",
+				"ExMatGrp",
+				"Xplnt",
+				"ValidFrm",
+				"GrWt",
+				"WUN",
+				"NetWt",
+				"Vol",
+				"VUN",
+				"EANUPC",
+				"CT",
+				"GrPMt",
+				"TLC",
+				"MatDesc2",
+				"VarStruct",
+				"ProdVariant"
+			]
 		}
 	}, {
 		"name": "acct",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type",
@@ -43,10 +44,24 @@
 				"ValCls":"3100",
 				"MovAvgPrice":"0"
 				}
+=======
+			"filled_fields": [
+				"Material",
+				"MType",
+				"ValCls",
+				"StandardPrice"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"MovAvgPrice"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "cost",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type"
@@ -55,10 +70,21 @@
 				"IndSector":"C",
 				"Plant":"P001"
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MType"
+			],
+			"default_fields": [
+				"IndSector",
+				"Plant"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "gen",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type"
@@ -72,10 +98,26 @@
 				"PerInd":"D",
 				"NS":""
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MType"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SLoc",
+				"SC",
+				"HazMat",
+				"PerInd",
+				"NS"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "MRP",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type",
@@ -112,10 +154,49 @@
 				"EfDate":"",
 				"FFMat":""
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MTYPE",
+				"ABC",
+				"ValidFrom"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SLoc",
+				"MRPGroup",
+				"MMPP",
+				"MRPType",
+				"PlanningTimeFence",
+				"MRPController",
+				"LotSize",
+				"RoundingValue",
+				"ProcType",
+				"SpecProc",
+				"SLoc1",
+				"InHouseProd",
+				"PlanDelTime",
+				"GRT",
+				"Schedule",
+				"SafetyStock",
+				"SafetyTimeIndicat",
+				"SafetyTimeActCover",
+				"PI",
+				"SG",
+				"ConsumptionModule",
+				"BackwardConsumptionPer",
+				"ForwardConsumptionPer",
+				"AV",
+				"EfDate",
+				"FFMat"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "purchase",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type",
@@ -132,10 +213,29 @@
 				"CodeNo":"",
 				"CasNo":""
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MType",
+				"Orig"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"OUn",
+				"PGr",
+				"PVKey",
+				"I1",
+				"SourceList",
+				"CodeNo",
+				"CasNo"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "sales_org",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type",
@@ -162,10 +262,38 @@
 				"TGroup":"001",
 				"LGrp":"P001"
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MType",
+				"ValidFrom",
+				"MATSTATGRP",
+				"MG1",
+				"MG2",
+				"Orig"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SOrg",
+				"DChnl",
+				"OUn",
+				"St",
+				"Plnt",
+				"CDc",
+				"AAG",
+				"tax",
+				"MinOrder",
+				"Marked",
+				"TGroup",
+				"LGrp"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "storage",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"MType":"material_type",
@@ -179,10 +307,26 @@
 				"HazMat":"",
 				"PerInd":"D"
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"MType",
+				"something",
+				"NS"
+			],
+			"default_fields": [
+				"I",
+				"Plant",
+				"SC",
+				"HazMat",
+				"PerInd"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "pir",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"VendorMaterialCode":"sap_code",
@@ -232,10 +376,62 @@
 				"CondPrc3":"",
 				"CondUnit3":""
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"VendorMaterialCode",
+				"COO",
+				"FOB",
+				"Curr",
+				"ValidOn",
+				"FREIGHT",
+				"CUSTOMS",
+				"ROYALTY",
+				"STICKERING"
+			],
+			"default_fields": [
+				"Vendor",
+				"PurchaseOrg",
+				"Plnt",
+				"OUn",
+				"Denom",
+				"PIREq",
+				"PDT",
+				"PGrp",
+				"StandardQty",
+				"UnderdelTol",
+				"OverDelTol",
+				"ARq",
+				"Unlimited",
+				"Ctr",
+				"Tx",
+				"GRIV",
+				"IncoT",
+				"Inco2",
+				"ValidTo",
+				"CondType",
+				"RateUnit",
+				"CondPrc",
+				"CondUnit",
+				"CondType1",
+				"RateUnit1",
+				"CondPrc1",
+				"CondUnit1",
+				"CondType2",
+				"RateUnit2",
+				"CondPrc2",
+				"CondUnit2",
+				"CondType3",
+				"RateUnit3",
+				"CondPrc3",
+				"CondUnit3"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "source_list",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"Material":"sap_code",
 				"ValidFrom":"today"
@@ -260,10 +456,37 @@
 				"DChnl":"02",
 				"ValidTo":"31.12.9999"
 			}
+=======
+			"filled_fields": [
+				"Material",
+				"ValidFrom"
+			],
+			"default_fields": [
+				"Plnt",
+				"CounterVendor",
+				"ValidTo",
+				"Vendor",
+				"POrg",
+				"FVd"
+			]
+		},
+		"catalog": {
+			"filled_fields": [
+				"ListPrice",
+				"ValidFrom",
+				"Material"
+			],
+			"default_fields": [
+				"SalesOrg",
+				"DChnl",
+				"ValidTo"
+			]
+>>>>>>> origin/master
 		}
 	}, {
 		"name": "rsp",
 		"fields": {
+<<<<<<< HEAD
 			"filled_fields": {
 				"RSP":"srp",
 				"ValidFrom":"today",
@@ -274,6 +497,18 @@
 				"DChnl":"02",
 				"ValidTo":"31.12.9999"
 			}
+=======
+			"filled_fields": [
+				"RSP",
+				"ValidFrom",
+				"Material"
+			],
+			"default_fields": [
+				"SalesOrg",
+				"DChnl",
+				"ValidTo"
+			]
+>>>>>>> origin/master
 		}
 	}
 ]
