@@ -111,7 +111,9 @@ var app = new Vue({
 			this.new_condition = {};
 		},
 		removeCondition: function(fieldsObject, key){
-			Vue.set(fieldsObject[key], "value", "");
+			var value = _.values(fieldsObject.value)[0];
+			fieldsObject["field"]["value"] = String(fieldsObject["field"]["value"]);
+			Vue.set(fieldsObject, "value", value);
 		}
 	}
 })
@@ -223,3 +225,4 @@ var downloadData = function(callback){
 function normalize(value){
 	return value.replace(/\s|-/g, "_").toLowerCase();
 }
+

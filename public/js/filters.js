@@ -72,3 +72,11 @@ Vue.filter('humanize', function(x){
 function removeCarriage(data){
   return data.replace(/\r?\n|\r/g, "").replace(/\"/g, "").replace(",", "");
 }
+
+Vue.filter('tabify', function(x){
+  return x + 'tab';
+})
+
+Vue.filter('body', function(x){
+  return x + 'body';
+})
