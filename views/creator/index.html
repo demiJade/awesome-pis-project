@@ -91,6 +91,7 @@
 						<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
 							View
 						</button>
+						<button class="btn btn-default" v-on:click="extractData(index)">Extract</button>
 						<button class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)">Delete Batch</button>
 						<!-- <button v-on:click="view(batch, index)">
 							go to view link
@@ -154,6 +155,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	<script type="text/javascript" src="jszip/dist/jszip.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="js/dp/vue-app.js"></script>
 	<script type="text/javascript" src="creator/app.js"></script>
 	<script type="text/javascript" src="js/filters.js"></script>

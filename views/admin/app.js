@@ -48,8 +48,9 @@ var app = new Vue({
 					content: json
 				}, success: function(data){
 					console.log(data);
+					toastr.success("Changes saved!");
 				}
-			})
+			});
 		},
 		addField: function(array, key, value, type){
 			var vm = this;
@@ -101,10 +102,12 @@ var app = new Vue({
 			}
 		},
 		addSwiftField: function(obj, key, value){
-			Vue.set(obj, key, value);
+			var instance = {};
 			for (field in value){
+				instance[field] = value[field];
 				Vue.set(value, field, "");
 			}
+			Vue.set(obj, key, instance);
 		},
 		createCondition: function(obj, key, value){
 			Vue.set(obj, key, value);

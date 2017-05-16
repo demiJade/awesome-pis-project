@@ -21,12 +21,18 @@ var app = new Vue({
 		},
 		batches: batches,
 		user: user,
-		edit: false
+		edit: false,
+		new_swift: {}
 	},
 	methods: {
 		// resetValue: function(view, key, value){
 		// 	view.fields.default_fields[key] = value;
 		// },
+		extractData: function(batch_index){
+			var batch = this.batches[batch_index];
+			outputData = [];
+			createOutputData(batch);
+		},
 		saveData: function(){
 			var json = JSON.stringify(views, null, 4);
 			$.ajax({
@@ -195,53 +201,97 @@ var app = new Vue({
 
 
 var outputData = [];
-var createOutputData = function(callback){
-	$.getJSON("data/output.json", function( data ) {
-	  $.each( data, function( obj) {
-	  	views.push(obj);
-	  });
-	  if (callback)
-	  	callback();
-	});
-	views.forEach(function(x){
-		var viewOutputData = [];
-		rawData.forEach(function(y){
-			var obj = {};
-			var default_keys = Object.keys(x.fields.default_fields);
-			default_keys.forEach(function(z){
-				obj[z] = x.fields.default_fields[z];
+var createOutputData = function(batch){
+	app.views.forEach(function(x){
+		if (x.name != 'input' && x.name != 'swift'){
+			var viewOutputData = [];
+			var multiplying_fields = [];
+			var conditional_fields = [];
+			x.fields.forEach(function(field){
+				if (field.type == "multiplying_field"){
+					multiplying_fields.push(field);
+				}
+				if (typeof field.value === 'object'){
+					conditional_fields.push(field);
+				}
 			});
-			var filled_keys = Object.keys(x.fields.filled_fields);
-			filled_keys.forEach(function(z){
-				obj[z] = y[x.fields.filled_fields[z]];
+			batch.items.forEach(function(y){
+				var obj = {};
+				var keys = [];
+				var multiply = false;
+				var condition = false;
+				x.fields.forEach(function(field){
+					keys.push(field.field);
+					if (field.type == "default_field" && typeof field.value == 'string'){
+						obj[field.field] = field.value;
+					} else if (field.type == "filled_field"){
+						obj[field.field] = y[field.value];
+					}
+				});
+				// var filled_keys = Object.keys(x.fields.filled_fields);
+				// filled_keys.forEach(function(z){
+				// 	obj[z] = y[x.fields.filled_fields[z]];
+				// });
+				if (multiplying_fields.length == 0 && conditional_fields.length == 0){
+					viewOutputData.push(obj);
+				} else {
+					if (multiplying_fields.length > 0){
+						multiplying_fields.forEach(function(field){
+							var values = field.value.split(",");
+							values.forEach(function(x){
+								var add_obj = {};
+								for (key in obj){
+									add_obj[key] = obj[key];
+								}
+								add_obj[field.field] = x;
+								viewOutputData.push(add_obj);
+							});
+						});
+					}
+					if (conditional_fields.length > 0){
+						viewOutputData.forEach(function(data_object){
+							conditional_fields.forEach(function(field){
+								data_object[field.field] = "";
+								var conditions = Object.keys(field.value);
+								conditions.forEach(function(condition){
+									var condition_key = condition.split("=")[0];
+									var condition_value = condition.split("=")[1];
+									if (data_object[condition_key] == condition_value){
+										data_object[field.field] = field.value[condition];
+									}
+								})
+							})
+						})
+					}
+					
+				}
 			});
-			viewOutputData.push(obj);
-		});
-		outputData.push(viewOutputData);
+			outputData.push(viewOutputData);
+		}
+		
 	});
 	console.log(outputData);
-	downloadData();
+	downloadData(outputData);
 }	
 
-var downloadData = function(callback){
-	if (callback)
-		callback();
+var downloadData = function(outputData){
 	var zip = new JSZip();
 	outputData.forEach(function(view, i){
-		var headers = Object.keys(views[i].fields.filled_fields);
-		headers = headers.concat(Object.keys(views[i].fields.default_fields));
-		var output = headers.join(",");
-		view.forEach(function(row){
-			output += "\n";
-			for (var i = 0; i < headers.length; i++){
-				output += '"' + row[headers[i]] + '"';
-				if (i < headers.length -1){
-					output += ",";
+		if (view.length > 0){
+			var headers = Object.keys(view[0]);
+			var output = headers.join(",");
+			view.forEach(function(row){
+				output += "\n";
+				for (var i = 0; i < headers.length; i++){
+					output += '"' + row[headers[i]] + '"';
+					if (i < headers.length -1){
+						output += ",";
+					}
 				}
-			}
-		});
-		console.log(output);
-		zip.file(views[i].name + ".csv", output);
+			});
+			console.log(output);
+			zip.file(views[i+2].name + ".csv", output);
+		}
 	});
 	zip.generateAsync({type:"blob"}).then(function(content){
 		var url = window.URL.createObjectURL(content);
