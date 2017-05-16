@@ -937,16 +937,16 @@
                 "type": "default_field"
             },
             {
-                "SafetyTimeIndicat": {
-                    "value": "2",
-                    "type": "default_field"
-                }
+                "field": "SafetyTimeIndicat",
+                "value": "2",
+                "type": "default_field"
+
             },
             {
-                "SafetyTimeActCover": {
-                    "value": "22",
-                    "type": "default_field"
-                }
+                "field": "SafetyTimeActCover",
+                "value": "22",
+                "type": "default_field"
+                
             },
             {
                 "field": "PI",
@@ -1086,11 +1086,11 @@
             {
                 "field": "DChnl",
                 "value": {
-                    "division=cpd": "02,08",
-                    "division=ppd": "08",
-                    "division=lld": "02,08"
+                    "division=CPD": "02,08",
+                    "division=PPD": "08",
+                    "division=LPD": "02,08"
                 },
-                "type": "default_field"
+                "type": "multiplying_field"
             },
             {
                 "field": "OUn",

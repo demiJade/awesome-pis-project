@@ -107,8 +107,9 @@ app.post('/createbatch', function(req, res){
 	MongoClient.connect(url, function(err, db){
 		var batches = db.collection("batches");
 		batches.insert(batch).then(function(){
-			res.send("Saved");
-			db.close();
+			batches.findOne({created_by: batch.created_by, created_on: batch.created_on}).then(function(batch){
+				res.send(batch);
+			})
 		});
 	});
 });

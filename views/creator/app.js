@@ -82,10 +82,9 @@ var app = new Vue({
 					batch: vm.batch
 				},
 				success: function(data){
+					vm.batches.push(data);
 					console.log(data);
-					if (data == 'Saved'){
-						vm.batches.push(vm.batch);
-					}
+					toastr.success("Batch created");
 					vm.batch = {
 						division: "",
 						brand: "",
@@ -207,12 +206,15 @@ var createOutputData = function(batch){
 			var viewOutputData = [];
 			var multiplying_fields = [];
 			var conditional_fields = [];
+			var input_conditional_multiplying_fields = [];
 			x.fields.forEach(function(field){
-				if (field.type == "multiplying_field"){
+				if (field.type == 'multiplying_field'){
 					multiplying_fields.push(field);
-				}
-				if (typeof field.value === 'object'){
+				} else if (typeof field.value === 'object'){
 					conditional_fields.push(field);
+				} else if (field.type == "conditionally_multiply_per_raw_input_field"){
+					multiplying_fields.push(field);
+					//when a value multiplies for a condition on an input field not outputted in the export file
 				}
 			});
 			batch.items.forEach(function(y){
@@ -226,6 +228,18 @@ var createOutputData = function(batch){
 						obj[field.field] = field.value;
 					} else if (field.type == "filled_field"){
 						obj[field.field] = y[field.value];
+					} else if (field.type == "multiplying_field" && typeof field.value == 'object'){
+						var conditions = Object.keys(field.value);
+						conditions.forEach(function(match){
+							var condition_key = match.split("=")[0];
+							var condition_value = match.split("=")[1];
+							var parameter = condition_key + "=" + y[condition_key];
+							if (match.trim() == parameter.trim()){
+								obj[field.field] = field.value[match];
+							}
+						})
+					} else if (field.type == "multiplying_field"  && typeof field.value == 'string'){
+						obj[field.field] = field.value;
 					}
 				});
 				// var filled_keys = Object.keys(x.fields.filled_fields);
@@ -237,7 +251,7 @@ var createOutputData = function(batch){
 				} else {
 					if (multiplying_fields.length > 0){
 						multiplying_fields.forEach(function(field){
-							var values = field.value.split(",");
+							var values = obj[field.field].split(",");
 							values.forEach(function(x){
 								var add_obj = {};
 								for (key in obj){
@@ -263,7 +277,7 @@ var createOutputData = function(batch){
 							})
 						})
 					}
-					
+
 				}
 			});
 			outputData.push(viewOutputData);
@@ -279,18 +293,18 @@ var downloadData = function(outputData){
 	outputData.forEach(function(view, i){
 		if (view.length > 0){
 			var headers = Object.keys(view[0]);
-			var output = headers.join(",");
+			var output = headers.join("\t");
 			view.forEach(function(row){
-				output += "\n";
+				output += "\r\n";
 				for (var i = 0; i < headers.length; i++){
-					output += '"' + row[headers[i]] + '"';
+					output += row[headers[i]];
 					if (i < headers.length -1){
-						output += ",";
+						output += "\t";
 					}
 				}
 			});
 			console.log(output);
-			zip.file(views[i+2].name + ".csv", output);
+			zip.file(views[i+2].name + ".txt", output);
 		}
 	});
 	zip.generateAsync({type:"blob"}).then(function(content){
