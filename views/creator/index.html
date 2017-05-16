@@ -80,19 +80,23 @@
 				<tr v-for="(batch, index) in batches">
 					<td>{{index + 1}}</td>
 					<td>{{batch.created_by}}</td>
-					<td>{{batch.created_on}}</td>
+					<td>{{batch.created_on | displayDateInWordsWithTime}}</td>
 					<td>{{batch.marketing_approved}}</td>
 					<td>{{batch.bc_approved}}</td>
-					<td>{{batch.extracted_on}}</td>
+					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
 					<td>{{batch.division}}</td>
 					<td>{{batch.brand}}</td>
-					<td>{{new Date() - batch.created_on}}</td>
+					<td v-if="batch.extracted_on == ''">{{ Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) }}</td>
+					<td v-else>Extracted by: {{batch.extracted_by}}</td>
 					<td>
-						<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
-							View
-						</button>
-						<button class="btn btn-default" v-on:click="extractData(index)">Extract</button>
-						<button class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)">Delete Batch</button>
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
+								View
+							</button>
+							<button class="btn btn-default" v-on:click="extractData(index)">Extract</button>
+							<button class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)">Delete Batch</button>
+						</div>
+						
 						<!-- <button v-on:click="view(batch, index)">
 							go to view link
 						</button> -->
@@ -160,6 +164,7 @@
 	<script type="text/javascript" src="creator/app.js"></script>
 	<script type="text/javascript" src="js/filters.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 	<script type="text/javascript">
 		// $('#raw-data').change(function(event){
 		// 	readData(event);

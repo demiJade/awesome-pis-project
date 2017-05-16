@@ -114,6 +114,20 @@ app.post('/createbatch', function(req, res){
 	});
 });
 
+app.post('/extracted_batch', function(req, res){
+	var created_by = req.body.created_by;
+	var created_on = new Date(req.body.created_on);
+	MongoClient.connect(url, function(err, db){
+		var batches = db.collection("batches");
+		batches.findOneAndUpdate({created_by: created_by, created_on: created_on}, {$set:{extracted_on: new Date(), extracted_by: req.user.username}}).then(function(){
+			batches.findOne({created_by:created_by, created_on:created_on}).then(function(batch){
+				res.send(batch);
+			})
+		})
+	});
+});
+
+
 app.get('/getbatches', function(req, res){
 	MongoClient.connect(url, function(err, db){
 		var collection = db.collection("batches");

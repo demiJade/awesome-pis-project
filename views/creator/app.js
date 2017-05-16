@@ -29,9 +29,24 @@ var app = new Vue({
 		// 	view.fields.default_fields[key] = value;
 		// },
 		extractData: function(batch_index){
-			var batch = this.batches[batch_index];
-			outputData = [];
-			createOutputData(batch);
+			var vm = this;
+			var batch = vm.batches[batch_index]
+			var created_on = batch.created_on;
+			var created_by = batch.created_by;					
+			createOutputData(batch, function(){
+				$.ajax({
+					url: '/extracted_batch',
+					type: 'POST',
+					data: {
+						created_on: created_on,
+						created_by: created_by
+					},
+					success: function(batch){
+						Vue.set(vm.batches[batch_index], "extracted_on", batch.extracted_on)
+						Vue.set(vm.batches[batch_index], "extracted_by", batch.extracted_by)
+					}
+				})
+			});
 		},
 		saveData: function(){
 			var json = JSON.stringify(views, null, 4);
@@ -200,7 +215,8 @@ var app = new Vue({
 
 
 var outputData = [];
-var createOutputData = function(batch){
+var createOutputData = function(batch, callback){
+	outputData = [];
 	app.views.forEach(function(x){
 		if (x.name != 'input' && x.name != 'swift'){
 			var viewOutputData = [];
@@ -285,10 +301,10 @@ var createOutputData = function(batch){
 		
 	});
 	console.log(outputData);
-	downloadData(outputData);
+	downloadData(outputData, callback);
 }	
 
-var downloadData = function(outputData){
+var downloadData = function(outputData, callback){
 	var zip = new JSZip();
 	outputData.forEach(function(view, i){
 		if (view.length > 0){
@@ -320,6 +336,8 @@ var downloadData = function(outputData){
 
 			document.body.appendChild(a);
 			a.click();
+			if (callback)
+				callback();
 	});
 }
 
