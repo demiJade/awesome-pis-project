@@ -43,19 +43,29 @@
 </div> -->
 
 <div class="container" id="app">
-	<h1>Product Information System <small id="user"><span class="glyphicon glyphicon-user"></span> {{user.username}}
-		<p><a href="/logout">Log out</a></p></small></h1>
+	<h1>Product Information System 
+		<small id="user">
+			<span class="glyphicon glyphicon-user"></span> {{user.username}}
+			<p><a href="/logout">Log out</a></p>
+			<p><a href="/change_password">Change Password</a></p>
+		</small></h1>
 	<div>
 		<button class="btn btn-success" v-on:click="saveData()">Save Changes</button>
 		<br>
 		<br>
 		<ul class="nav nav-tabs" role="tablist">
 	    	<li role="presentation" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views"><a :href="view.name | appendHash" :aria-controls="view.name" role="tab" data-toggle="tab">{{view.name | humanize}}</a></li>
+	    	<li role="presentation"><a href="#users" aria-controls="users" role="tab" data-toggle="tab">
+	    		Users
+	    	</a></li>
+	    	<li role="presentation"><a href="#faq" aria-controls="faq" role="tab" data-toggle="tab">
+	    		FAQ
+	    	</a></li>
 	  	</ul>
 	    <div class="tab-content">
 	    	<div role="tabpanel" class="tab-pane" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views" :id="view.name">
 	    		<div class="scrollable-table">
-	    			<table class="table" v-if="view.name != 'input' && view.name != 'swift'">
+	    			<table class="table table-striped" v-if="view.name != 'input' && view.name != 'swift'">
 				    	<thead>
 				    		<tr>
 				    			<th class="col-md-2">Field</td>
@@ -183,7 +193,7 @@
 				    		</template>
 				    	</tbody>
 			    	</table>
-			    	<table class="table" v-if="view.name == 'input'">
+			    	<table class="table table-striped" v-if="view.name == 'input'">
 			    		<thead>
 			    			<tr>
 			    				<th>Name</th>
@@ -252,7 +262,7 @@
 			    		<button class="btn btn-default" v-on:click="edit = true" v-if="edit == false">Edit</button>
 			    		<button class="btn btn-success" v-on:click="edit = false" v-if="edit == true">Done</button>
 			    	</div>
-			    	<table class="table table-striped" v-if="view.name == 'swift'">
+			    	<table class="table table-striped table-striped" v-if="view.name == 'swift'">
 			    		
 
 						
@@ -303,6 +313,34 @@
 			    	</table>
 	    		</div>
 		    	
+	    	</div>
+	    	<div role="tabpanel" class="tab-pane" id="users">
+	    		<table class="table table-striped">
+	    			<thead>
+	    				<tr>
+	    					<th>Username</th>
+	    					<th>Email</th>
+	    					<th>Role</th>
+	    					<th>Last Login</th>
+	    					<th>Action</th>
+	    				</tr>
+	    			</thead>
+	    			<tbody>
+	    				<tr v-for="(user, user_index) in users">
+	    					<td>{{user.username}}</td>
+	    					<td>{{user.email}}</td>
+	    					<td>{{user.role}}</td>
+	    					<td>{{user.last_logged_in | displayDateInWordsWithTime}}</td>
+	    					<td>
+	    						<button class="btn btn-danger" v-on:click="deleteUser(user_index)">Delete Account</button>
+	    						<button class='btn btn-default' v-on:click="resetPassword(user_index)">Reset Password</button>
+	    					</td>
+	    				</tr>
+	    			</tbody>
+	    		</table>
+	    	</div>
+	    	<div role="tabpanel" class="tab-pane" id="faq">
+	    		
 	    	</div>
 	  	</div>
 	  	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -468,6 +506,15 @@
 				for (field in data){
 					Vue.set(app.user, field, data[field]);
 				}
+			}
+		});
+		$.ajax({
+			url: '/getusers',
+			type: 'GET',
+			success: function(data){
+				data.forEach(function(user){
+					app.users.push(user);
+				})
 			}
 		});
 	})

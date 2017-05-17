@@ -307,6 +307,57 @@ app.get('/logout', function(req, res){
   req.session.notice = "You have successfully been logged out " + name + "!";
 });
 
+app.post('/deleteUser', function(req, res){
+	var collection = "localUsers";
+	var filter = req.body.filter;
+	MongoClient.connect(userUrl, function(err, db){
+		db.collection(collection).remove(filter, function(){
+			res.send("Deleted");
+			db.close();
+		});
+	});
+});
+
+app.post('/resetUserPassword', function(req, res){
+	var collection = "localUsers";
+	var filter = req.body.filter;
+	var hash = bcrypt.hashSync(filter.username, 8);
+	MongoClient.connect(userUrl, function(err, db){
+		db.collection(collection).update(filter, {$set:{password: hash}}, function(){
+			res.send("reset");
+		})
+	})
+});
+
+app.get('/getusers', function(req, res){
+	MongoClient.connect(userUrl, function(err, db){
+		db.collection("localUsers").find().toArray(function(err, users){
+			res.send(users);
+		});
+	});
+});
+
+app.get('/change_password', function(req, res){
+	res.sendFile(path.join(__dirname, 'views', 'changepassword.html'));
+});
+
+app.post('/change_password', function(req, res){
+	var collection = "localUsers";
+	var username = req.body.username;
+	var password = req.body.password;
+	var confirm_password = req.body.confirmpassword;
+	if (password == confirm_password){
+		var hash = bcrypt.hashSync(req.body.confirmpassword, 8);
+		MongoClient.connect(userUrl, function(err, db){
+			db.collection(collection).update({username: req.user.username}, {$set:{password: hash}}, function(){
+				return res.redirect("/");
+			})
+		})
+	} else {
+		return res.redirect("/change_password");
+	}
+});
+
 //==========FUNCTIONS==================//
 var insert = function(data, col, callback){
     MongoClient.connect(url, function(err,db){

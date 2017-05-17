@@ -35,7 +35,8 @@ var app = new Vue({
 			value_field_mapping: ""
 		},
 		new_condition: {},
-		user
+		user: {},
+		users: []
 	},
 	methods: {
 		resetValue: function(view, key, value){
@@ -135,6 +136,48 @@ var app = new Vue({
 		},
 		deleteCondition: function(object, key){
 			Vue.delete(object, key);
+		},
+		deleteUser: function(user_index){
+			var vm = this;
+			var username = vm.users[user_index].username;
+			var message = "Are you sure you want to permanently delete " + username + "?";
+			var alert = confirm(message);
+			if (alert){
+				$.ajax({
+					url: "/deleteUser",
+					type: 'POST',
+					data: {
+						filter: {
+							username: username
+						}
+					}, success: function(data){
+						if (data == "Deleted"){
+							vm.users.splice(user_index, 1);
+						}
+					}
+				})
+			}
+		},
+		resetPassword: function(user_index){
+			var vm = this;
+			var username = vm.users[user_index].username;
+			var message = "Are you sure you want to reset the password of " + username + "?";
+			var alert = confirm(message);
+			if (alert){
+				$.ajax({
+					url: "/resetUserPassword",
+					type: 'POST',
+					data: {
+						filter: {
+							username: username
+						}
+					}, success: function(data){
+						if (data == "Reset"){
+							toastr.success("Successfully reset the password of " + username);
+						}
+					}
+				})
+			}
 		}
 	}
 })
