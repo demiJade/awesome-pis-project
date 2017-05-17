@@ -41,26 +41,23 @@
 	</div> -->
 	
 	<div class="container" id="app">
-		<h1>PIS File Parser</h1>
-		<div>
+		<h1>Product Information System <small id="user"><span class="glyphicon glyphicon-user"></span> {{user.username}}
+		<p><a href="/logout">Log out</a></p></small></h1>
+		<form class="form-inline">
 			<div class="form-group">
 				<label for="raw-data" >Import Raw File</label>
 				<input type="file" id="raw-data" v-on:change="readData()">
 			</div>
-			<label>Role</label>
+			<!-- <label>Role</label>
 	        <select name="role" id="division" class="form-control" v-model="batch.division">
-	          <option value="cpd">Consumer Products Division</option>
-	          <option value="ppd">Professional Products Division</option>
-	          <option value="lpd">Luxury Products Division</option>
+	          <option value="CPD">Consumer Products Division</option>
+	          <option value="PPD">Professional Products Division</option>
+	          <option value="LPD">Luxury Products Division</option>
 	        </select>
-	        <input type="text" id="raw-data" class="form-control" v-model="batch.brand">
-		</div>
-		<br>
-		<div>
+	        <input type="text" id="raw-data" class="form-control" v-model="batch.brand"> -->
 			<button class="btn btn-default" v-on:click="saveBatch()">Create</button>
-			<br>
-			<br>
-		</div>
+		</form>
+		<br>
 		<table class="table">
 			<thead>
 				<tr>
@@ -70,31 +67,31 @@
 					<th>Marketing Approved</th>
 					<th>BC Approved</th>
 					<th>Extracted On</th>
-					<th>Division</th>
-					<th>Brand</th>
+					<!-- <th>Division</th>
+					<th>Brand</th> -->
 					<th>Days Pending</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(batch, index) in batches">
-					<td>{{index + 1}}</td>
+				<tr v-for="(batch, index) in batches" v-bind:class="{pending: batch.extracted_on == ''}">
+					<td> {{index + 1}} <span class="glyphicon glyphicon-time" v-if="batch.extracted_on == ''"></span> </td>
 					<td>{{batch.created_by}}</td>
 					<td>{{batch.created_on | displayDateInWordsWithTime}}</td>
-					<td>{{batch.marketing_approved}}</td>
-					<td>{{batch.bc_approved}}</td>
+					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.marketing_approved == true"></span></td>
+					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.bc_approved == true"></span></td>
 					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
-					<td>{{batch.division}}</td>
-					<td>{{batch.brand}}</td>
+				<!-- 	<td>{{batch.division}}</td>
+					<td>{{batch.brand}}</td> -->
 					<td v-if="batch.extracted_on == ''">{{ Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) }}</td>
 					<td v-else>Extracted by: {{batch.extracted_by}}</td>
-					<td>
-						<div class="btn-group">
+					<td class="col-md-2">
+						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
-								View
+								<span class="glyphicon glyphicon-list"></span>
 							</button>
-							<button class="btn btn-default" v-on:click="extractData(index)">Extract</button>
-							<button class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)">Delete Batch</button>
+							<button type="button" v-bind:disabled="!(batch.marketing_approved == true && batch.bc_approved == true)" class="btn btn-default" v-on:click="extractData(index)"><span class="glyphicon glyphicon-download-alt"></span></button>
+							<button type="button" class="btn btn-danger" v-if="user.username == batch.created_by" v-on:click="deleteBatch(index)"><span class="glyphicon glyphicon-trash"></span></button>
 						</div>
 						
 						<!-- <button v-on:click="view(batch, index)">
@@ -169,32 +166,35 @@
 		// $('#raw-data').change(function(event){
 		// 	readData(event);
 		// });
+		$(document).ready(function(){
+			$.ajax({
+				url: '/getbatches',
+				type: 'GET',
+				success: function(data){
+					data.forEach(function(batch){
+						batches.push(batch);
+					});
+				}
+			});
+			$.getJSON( "data/output.json", function( data ) {
+				$.each( data, function(i, values) {
+				  	views.push(data[i]);
+				});
+			});
+			$.ajax({
+				url: '/getuser',
+				type: 'GET',
+				success: function(data){
+					for (field in data){
+						Vue.set(app.user, field, data[field]);
+					}
+				}
+			});
+		})
 		$("#download-data").click(function(event){
 			downloadData();
 		});
-		$.ajax({
-			url: '/getbatches',
-			type: 'GET',
-			success: function(data){
-				data.forEach(function(batch){
-					batches.push(batch);
-				});
-			}
-		});
-		$.getJSON( "data/output.json", function( data ) {
-			$.each( data, function(i, values) {
-			  	views.push(data[i]);
-			});
-		});
-		$.ajax({
-			url: '/getuser',
-			type: 'GET',
-			success: function(data){
-				for (field in data){
-					user[field] = data[field];
-				}
-			}
-		});
+		
 
 	</script>
 </body>

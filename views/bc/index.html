@@ -13,54 +13,9 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"/>
 </head>
 <body>
-<!-- 	<div id="app" class="container-fluid">
-		
-		<div class="col-sm-2 col-md-2 dashboard-nav">
-			<nav class="navbar navbar-default navbar-fixed navbar-inverse">
-				<ul class="nav ">
-					<img src="../pictures/Assistant_logo.jpg">
-	        		<li class="dashboard-menu"><router-link to="/"><span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;WSL Calculator</router-link></li>
-					<li class="dashboard-menu"><router-link to="/promo"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;Promo List</router-link></li>
-					<li class="dashboard-menu"><router-link to="/reports"><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;Reports</router-link>
-					</li>
-					<div id="user">
-						<p>&nbsp;Logged in {{user.username | appendAs}}</p>
-						&nbsp;<a id="logout-link" href="/logout">Logout</a>
-					</div>
-				</ui>
-	    	</nav>
-		</div>
-		<div class="col-sm-10 col-md-10 page-content">
-			
-				<router-view></router-view>
-			
-		</div>
-	</div>
-	<div id="homepage">
-		
-	</div> -->
-	
 	<div class="container" id="app">
-		<h1>PIS File Parser</h1>
-		<div>
-			<div class="form-group">
-				<label for="raw-data" >Import Raw File</label>
-				<input type="file" id="raw-data" v-on:change="readData()">
-			</div>
-			<label>Role</label>
-	        <select name="role" id="division" class="form-control" v-model="batch.division">
-	          <option value="cpd">Consumer Products Division</option>
-	          <option value="ppd">Professional Products Division</option>
-	          <option value="lpd">Luxury Products Division</option>
-	        </select>
-	        <input type="text" id="raw-data" class="form-control" v-model="batch.brand">
-		</div>
-		<br>
-		<div>
-			<button class="btn btn-default" v-on:click="saveBatch()">Create</button>
-			<br>
-			<br>
-		</div>
+		<h1>Product Information System <small id="user"><span class="glyphicon glyphicon-user"></span> {{user.username}}
+		<p><a href="/logout">Log out</a></p></small></h1>
 		<table class="table">
 			<thead>
 				<tr>
@@ -77,12 +32,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(batch, index) in batches">
+				<tr v-for="(batch, index) in batches"  v-bind:class="{pending: batch.bc_approved != true}" >
 					<td>{{index + 1}}</td>
 					<td>{{batch.created_by}}</td>
 					<td>{{batch.created_on | displayDateInWordsWithTime}}</td>
-					<td>{{batch.marketing_approved}}</td>
-					<td>{{batch.bc_approved}}</td>
+					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.marketing_approved == true"></span></td>
+					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.bc_approved == true"></span></td>
 					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
 					<td>{{batch.division}}</td>
 					<td>{{batch.brand}}</td>
@@ -168,29 +123,32 @@
 		$("#download-data").click(function(event){
 			downloadData();
 		});
-		$.getJSON( "data/output.json", function( data ) {
-			$.each( data, function(i, values) {
-			  	views.push(data[i]);
-			});
-		});
-		$.ajax({
-			url: '/getbatches',
-			type: 'GET',
-			success: function(data){
-				data.forEach(function(batch){
-					batches.push(batch);
+		$(document).ready(function(){
+			$.getJSON( "data/output.json", function( data ) {
+				$.each( data, function(i, values) {
+				  	views.push(data[i]);
 				});
-			}
-		});
-		$.ajax({
-			url: '/getuser',
-			type: 'GET',
-			success: function(data){
-				for (field in data){
-					user[field] = data[field];
+			});
+			$.ajax({
+				url: '/getbatches',
+				type: 'GET',
+				success: function(data){
+					data.forEach(function(batch){
+						batches.push(batch);
+					});
 				}
-			}
-		});
+			});
+			$.ajax({
+				url: '/getuser',
+				type: 'GET',
+				success: function(data){
+					for (field in data){
+						Vue.set(app.user, field, data[field]);
+					}
+				}
+			});
+		})
+		
 
 	</script>
 </body>

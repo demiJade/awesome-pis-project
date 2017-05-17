@@ -240,7 +240,18 @@ var createOutputData = function(batch, callback){
 				var condition = false;
 				x.fields.forEach(function(field){
 					keys.push(field.field);
-					if (field.type == "default_field" && typeof field.value == 'string'){
+					if (field.value == "today") {
+						var date = new Date();
+						var day = date.getDate();
+						if (day < 10){
+							day = "0" + day;
+						}
+						var month = date.getMonth() + 1;
+						if (month < 10){
+							month = "0" + month;
+						}
+						obj[field.field] = day + "" +  month + date.getFullYear();
+					} else if (field.type == "default_field" && typeof field.value == 'string'){
 						obj[field.field] = field.value;
 					} else if (field.type == "filled_field"){
 						obj[field.field] = y[field.value];
@@ -256,6 +267,24 @@ var createOutputData = function(batch, callback){
 						})
 					} else if (field.type == "multiplying_field"  && typeof field.value == 'string'){
 						obj[field.field] = field.value;
+					} else if (typeof field.value == 'object'){
+						var conditions = Object.keys(field.value);
+						conditions.forEach(function(match){
+							var condition_key = match.split("=")[0];
+							var condition_value = match.split("=")[1];
+							var parameter = condition_key + "=" + y[condition_key];
+							if (match.trim() == parameter.trim()){
+								obj[field.field] = field.value[match];
+								var x = field.value[match];
+								obj[field.field] = x;
+							} 
+						})
+					} else if (field.type == "swift_field"){
+						var key = y.material_type + "_" + y.material_group + "_" + y.mpg1;
+						obj[field.field] = views[1].fields[key][field.value];
+						if (obj[field.field] == "n.a."){
+							obj[field.field] = "";
+						}
 					}
 				});
 				// var filled_keys = Object.keys(x.fields.filled_fields);
@@ -281,15 +310,17 @@ var createOutputData = function(batch, callback){
 					if (conditional_fields.length > 0){
 						viewOutputData.forEach(function(data_object){
 							conditional_fields.forEach(function(field){
-								data_object[field.field] = "";
-								var conditions = Object.keys(field.value);
-								conditions.forEach(function(condition){
-									var condition_key = condition.split("=")[0];
-									var condition_value = condition.split("=")[1];
-									if (data_object[condition_key] == condition_value){
-										data_object[field.field] = field.value[condition];
-									}
-								})
+								if (data_object[field.field] == undefined){
+									data_object[field.field] = "";
+									var conditions = Object.keys(field.value);
+									conditions.forEach(function(condition){
+										var condition_key = condition.split("=")[0];
+										var condition_value = condition.split("=")[1];
+										if (data_object[condition_key] == condition_value){
+											data_object[field.field] = field.value[condition];
+										}
+									})
+								}
 							})
 						})
 					}

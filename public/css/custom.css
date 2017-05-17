@@ -41,3 +41,41 @@
     width: auto;
     overflow: auto;
 }
+
+/*select {
+    font-size: 17px !important;
+    -webkit-appearance: none;
+    border: solid 1px #E7E7E7;
+    width: 432px;
+    padding: 7px 7px;
+    background: white;
+}
+*/
+
+.drag-handle:hover, .drag-handle:focus {
+    cursor: move;
+}
+
+#user {
+    float: right;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: right;
+    /* border-radius: 10px; */
+    /* padding: 10px; */
+    /* padding-bottom: 0px; */
+}
+
+span.glyphicon.glyphicon-user {
+    border: 2px solid #cccccc;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.pending {
+    background-color: #fbe2e6;
+}
+
+.center {
+    text-align: center
+}

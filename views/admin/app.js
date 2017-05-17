@@ -1,5 +1,6 @@
 var rawData = [];
 var views = [];
+var user = {};
 var app = new Vue({
 	el: '#app',
 	data: {
@@ -33,7 +34,8 @@ var app = new Vue({
 			ykexx: "",
 			value_field_mapping: ""
 		},
-		new_condition: {}
+		new_condition: {},
+		user
 	},
 	methods: {
 		resetValue: function(view, key, value){
@@ -66,11 +68,16 @@ var app = new Vue({
 			array.push(object);
 			vm.newfield = {};
 		},
-		deleteField: function(view, object, key){
-			var message = "Are you sure you want to delete the " + key + " from the " + view.name + "?";
+		deleteField: function(view, name, index){
+			var message = "Are you sure you want to delete " + name + " from the set of fields for" + view.name + "?";
 	        var result = confirm(message);
 	        if (result){
-				Vue.delete(object, key);
+	        	if (typeof view.fields === 'array'){
+	        		view.fields.splice(index, 1);
+	        	} else if (typeof view.fields === 'object'){
+	        		Vue.delete(view.fields, name)
+	        	}
+				
 			}
 		},
 		makeEditable: function(key){
@@ -78,21 +85,24 @@ var app = new Vue({
 		},
 		addInputField: function(){
 			var vm = this;
-			var object = {
-				creator_editable: vm.new_input_field.creator_editable,
-				marketing_editable: vm.new_input_field.marketing_editable,
-				bc_editable: vm.new_input_field.bc_editable
-			};
-			Vue.set(vm.views[0].fields, vm.new_input_field.key, object);
-			Vue.set(vm.new_input_field, "key", "");
-			Vue.set(vm.new_input_field, "creator_editable", true);
-			Vue.set(vm.new_input_field, "marketing_editable", false);
-			Vue.set(vm.new_input_field, "bc_editable", false);
+			if (vm.new_input_field.key != ""){
+				var object = {
+					creator_editable: vm.new_input_field.creator_editable,
+					marketing_editable: vm.new_input_field.marketing_editable,
+					bc_editable: vm.new_input_field.bc_editable
+				};
+				Vue.set(vm.views[0].fields, vm.new_input_field.key, object);
+				Vue.set(vm.new_input_field, "key", "");
+				Vue.set(vm.new_input_field, "creator_editable", true);
+				Vue.set(vm.new_input_field, "marketing_editable", false);
+				Vue.set(vm.new_input_field, "bc_editable", false);
+			}
+			
 		},
 		addCondition: function(fieldsObject, key){
-			if (typeof fieldsObject[key].value === 'string'){
+			if (typeof fieldsObject.value === 'string'){
 				var object = {};
-				Vue.set(fieldsObject[key], "value", object);
+				Vue.set(fieldsObject, "value", object);
 				// fieldsObject[key].value = {};
 				// fieldsObject[key].value = {
 				// 	'raw_file_key=value': 'value1,value2'
@@ -110,13 +120,21 @@ var app = new Vue({
 			Vue.set(obj, key, instance);
 		},
 		createCondition: function(obj, key, value){
-			Vue.set(obj, key, value);
-			this.new_condition = {};
+			if (key != undefined){
+				Vue.set(obj, key, value);
+				this.new_condition = {};
+			}
 		},
-		removeCondition: function(fieldsObject, key){
-			var value = _.values(fieldsObject.value)[0];
-			fieldsObject["field"]["value"] = String(fieldsObject["field"]["value"]);
-			Vue.set(fieldsObject, "value", value);
+		removeCondition: function(view, index){
+			var value = _.values(view.fields[index])[0] || "";
+			Vue.set(view.fields[index], "value", "");
+		},
+		updateKey: function(object, new_key, value, old_key){
+			Vue.set(object, new_key, value);
+			object.splice(old_key, 1);
+		},
+		deleteCondition: function(object, key){
+			Vue.delete(object, key);
 		}
 	}
 })

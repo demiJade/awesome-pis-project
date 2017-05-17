@@ -1,424 +1,491 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>
-		Product Information System
-	</title>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>
+	Product Information System
+</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<!-- <link href="css/custom.css" rel="stylesheet"> -->
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"/>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/normalize.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/checkbox.min.css">
 </head>
 <body>
 <!-- 	<div id="app" class="container-fluid">
-		
-		<div class="col-sm-2 col-md-2 dashboard-nav">
-			<nav class="navbar navbar-default navbar-fixed navbar-inverse">
-				<ul class="nav ">
-					<img src="../pictures/Assistant_logo.jpg">
-	        		<li class="dashboard-menu"><router-link to="/"><span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;WSL Calculator</router-link></li>
-					<li class="dashboard-menu"><router-link to="/promo"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;Promo List</router-link></li>
-					<li class="dashboard-menu"><router-link to="/reports"><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;Reports</router-link>
-					</li>
-					<div id="user">
-						<p>&nbsp;Logged in {{user.username | appendAs}}</p>
-						&nbsp;<a id="logout-link" href="/logout">Logout</a>
-					</div>
-				</ui>
-	    	</nav>
-		</div>
-		<div class="col-sm-10 col-md-10 page-content">
-			
-				<router-view></router-view>
-			
-		</div>
-	</div>
-	<div id="homepage">
-		
-	</div> -->
 	
-	<div class="container">
-		<h1>PIS File Parser</h1>
-		<div>
-			<label for="raw-data">Import Raw File</label>
-			<input type="file" id="raw-data" class="inputfile">
-		</div>
-		<br>
-		<div id="app">
-			<button class="btn btn-success" v-on:click="saveData()">Save Changes</button>
-			<br>
-			<br>
-			<ul class="nav nav-tabs" role="tablist">
-		    	<li role="presentation" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views"><a :href="view.name | appendHash" :aria-controls="view.name" role="tab" data-toggle="tab">{{view.name | humanize}}</a></li>
-		  	</ul>
-		    <div class="tab-content">
-		    	<div role="tabpanel" class="tab-pane" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views" :id="view.name">
-		    		<div class="scrollable-table">
-		    			<table class="table" v-if="view.name != 'input' && view.name != 'swift'">
-					    	<thead>
-					    		<tr>
-					    			<th class="col-md-2">Field</td>
-					    			<th>Default Value</td>
-					    			<th>Type</th>
-					    			<th>Action</th>
-					    			<th>Condition</th>
-					    		</tr>
-					    	</thead>
-					    	<tbody :id="view.name | body">
-						    	<tr>
-						    		<td class="col-md-2">
-						    			<input class="form-control"  type="text" name="key" v-model="newfield.key">
-						    		</td>
-						    		<td>
-						    			<input class="form-control"  type="text" name="value" v-model="newfield.value" placeholder="value1,value2,value3">
-						    		</td>
-						    		<td>
-						    			<select class="form-control" v-model="newfield.type">
-						    				<option value="default_field">Default</option>
-						    				<option value="filled_field">Filled</option>
-						    				<option value="multiplying_field">Multiplying</option>
-						    			</select>
-						    		</td>
-						    		<td>
-						    			<button class="btn btn-default" v-on:click="addField(view.fields, newfield.key, newfield.value, newfield.type)">Add Value</button>
-						    		</td>
-							    	<td>
-							    		<input class="col-sm-5 form-control" type="text" name="condition" v-model="newfield.condition">
-							    		
-					    			</td>
-							    </tr>
-							    
-							    
-					    		<tr v-for="(field, field_index) in view.fields" :id="view_index + '-' + field_index">
-					    			<!-- <template v-for="(value, key) in field"> -->
-					    				<template v-if="typeof field.value === 'string'">
-						    				<td class="col-md-2">{{field.field}}</td>
-							    			<td > 
-							    				<p v-if="typeof field.value === 'string'">
-							    					<input class="form-control" type="text" :value="field.value" v-model="field.value">
-							    				</p> 
-							    				<!-- <p v-if="typeof value.value === 'object'">
-							    					<input class="form-control" type="" name="" v-model="new_condition.value" placeholder="value1,value2">
-							    					IF
-							    					<input class="form-control" type="" name="" v-model="new_condition.condition" placeholder="division=cpd">
-							    					<button v-on:click="createCondition(value.value, new_condition.condition, new_condition.value)">Save</button>
-							    				</p>
-							    				<p v-if="typeof value.value === 'object'" v-for="(condition_value, condition_key) in value.value">
-							    					<input class="form-control" type="text" name="" v-model="value.value[condition_key]">
-							    					IF
-							    					<input class="form-control" type="text" name="" v-model="condition_key" placeholder="material_group=110">
-							    				</p> -->
-							    			</td>
-							    			<td > <span>{{field.type | humanize}}</span> </td>
-							    			<td >
-							    				<button class="btn btn-danger" v-on:click="deleteField(view, view.fields[field_index], field.field)">Delete</button>
-							    				
-							    			</td>
-							    			<td>
-							    				<button class="btn btn-default" v-on:click="addCondition(view.fields[field_index], field.field)" v-if="field.type != 'filled_field'">Add Condition</button>
-							    			</td>
-						    			</template>
-						    			<template v-else>
-						    				<td class="col-md-2">{{field.field}}</td>
-							    			<td > 
-							    				<!-- <p v-if="typeof value.value === 'string'">
-							    					<input class="form-control" type="text" :value="value" v-model="view.fields[key].value">
-							    				</p> --> 
-							    				<p v-if="typeof field.value === 'object'">
-							    					<input class="form-control" type="" name="" v-model="new_condition.value" placeholder="value1,value2">
-							    				</p>
-							    				<p v-if="typeof field.value === 'object'">
-							    					<input class="form-control" type="text" name=""  v-for="(condition_value, condition_key) in field.value" v-model="field.value[condition_key]">
-							    				</p>
-							    			</td>
-							    			<td > <span>{{field.type | humanize}}</span> </td>
-							    			<td >
-							    				<button class="btn btn-danger" v-on:click="deleteField(view, view.fields, field.field)">Delete</button>
-							    				<!-- <button v-on:click="addCondition(view.fields, key)">Add Condition</button> -->
-							    			</td>
-							    			<td>
-								    			<div class="input-group">
-								    				<input class="form-control" type="" name="" v-model="new_condition.condition" placeholder="division=cpd">
-								    				<span class="input-group-btn">
-							    						<button class="btn btn-success" v-on:click="createCondition(field.value, new_condition.condition, new_condition.value)">Save</button>
-							    					</span>
-							    					<span class="input-group-btn">
-							    						<button class="btn btn-default" v-on:click="removeCondition(view.fields[field.index])">No Condition</button>
-							    					</span>
-								    			</div>
-							    				
-							    					<!-- <button class="btn btn-success" v-on:click="createCondition(value.value, new_condition.condition, new_condition.value)">Save</button> -->
-							    				<p >
-							    					<div class="input-group" v-for="(condition_value, condition_key) in field.value" >
-								    					<input class="form-control" type="text" name="" v-model="condition_key" placeholder="material_group=110">
-								    					<span class="input-group-btn">
-								    						<button class="btn btn-danger" type="button" v-on:click="deleteField(view, field.value, condition_key)">Delete Condition</button>
-								    					</span>
-							    					
-							    					</div>
-							    				</p>
-						    					
-							    			</td>
-						    			</template>
-					    			<!-- </template> -->
-					    			
-					    		</tr>
-					    		<!-- </draggable> -->
-					    		</template>
-					    	</tbody>
-				    	</table>
-				    	<table class="table" v-if="view.name == 'input'">
-				    		<thead>
-				    			<tr>
-				    				<th>Name</th>
-				    				<th>Creator</th>
-				    				<th>Marketing</th>
-				    				<th>Business Controller</th>
-				    				<th>Action</th>
-				    			</tr>
-				    		</thead>
-				    		<tbody>
-				    			<tr>
-				    				<td><input type="text" name="" class="form-control" v-model="new_input_field.key"></td>
-				    				<td><input type="checkbox" name="" v-model="new_input_field.creator_editable"></td>
-				    				<td><input type="checkbox" name="" v-model="new_input_field.marketing_editable"></td>
-				    				<td><input type="checkbox" name="" v-model="new_input_field.bc_editable"></td>
-				    				<td><button class="btn btn-default" v-on:click="addInputField()">Add Input Field</button></td>
-				    			</tr>
-				    			<tr v-for="(value, key) in view.fields">
-				    				<td>{{key}}</td>
-				    				<td>{{value.creator_editable}}</td>
-				    				<td>{{value.marketing_editable}}</td>
-				    				<td>{{value.bc_editable}}</td>
-				    				<td><button class="btn btn-danger" v-on:click="deleteField(view, view.fields, key)">Delete</button></td>
-				    			</tr>
-				    		</tbody>
-				    	</table>
-				    	<div v-if="view.name == 'swift'">
-				    		<button class="btn btn-default" v-on:click="edit = true" v-if="edit == false">Edit</button>
-				    		<button class="btn btn-success" v-on:click="edit = false" v-if="edit == true">Done</button>
-				    		<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Add</button>
-				    	</div>
-				    	<table class="table" v-if="view.name == 'swift'">
-				    		
-
-							
-				    		<thead>
-				    			<tr>
-				    				<th>Key</th>
-				    				<th>Material Type</th>
-				    				<th>Description</th>
-				    				<th>Material Group</th>
-				    				<th>Description in SAP</th>
-				    				<th>MPG1</th>
-				    				<th>Description in SAP</th>
-				    				<th>MPG2</th>
-				    				<th>Item Category Group</th>
-				    				<th>Material Statistics Group</th>
-				    				<th>Valuation Class</th>
-				    				<th>BOM</th>
-				    				<th>BOM Usage</th>
-				    				<th>YKExx</th>
-				    				<th>Value Field Mapping</th>
-				    				<th>Action</th>
-				    			</tr>
-				    		</thead>
-				    		<tbody>
-				    			<tr v-for="(item, key, item_index) in view.fields">
-				    				<td>{{key}}</td>
-				    				<td v-for="(value, key) in item">
-				    					<p v-show="edit == false" > {{value}} </p>
-			        					<input class="form-control" v-if="edit == true" type="text" :name="value" v-model="item[key]">
-				    				</td>
-				    				<td><button class="btn btn-danger" v-on:click="deleteField(view, view.fields, key)">Delete</button></td>
-				    				<!-- <td>{{value.material_type}}</td>
-				    				<td>{{value.description}}</td>
-				    				<td>{{value.material_group}}</td>
-				    				<td>{{value.description_in_sap}}</td>
-				    				<td>{{value.mpg1}}</td>
-				    				<td>{{value.second_description_in_sap}}</td>
-				    				<td>{{value.mpg2}}</td>
-				    				<td>{{value.item_category_group}}</td>
-				    				<td>{{value.material_statistics_group}}</td>
-				    				<td>{{value.valuation_class}}</td>
-				    				<td>{{value.bom}}</td>
-				    				<td>{{value.bom_usage}}</td>
-				    				<td>{{value.ykexx}}</td>
-				    				<td>{{value_field_mapping}}</td> -->
-				    			</tr>
-				    		</tbody>
-				    	</table>
-		    		</div>
-			    	
-		    	</div>
-		  	</div>
-		  	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-			 	<div class="modal-dialog modal-lg" role="document">
-			    	<div class="modal-content">
-			    		<div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-					     </div>
-					     <div class="modal-body">
-					        <form>
-					        	<div class="form-group">
-					        		<label>Material Type</label>
-					        		<input type="text" name="material_type" v-model="new_swift.material_type" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Description</label>
-					        		<input type="text" name="description" v-model="new_swift.description" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Material Group</label>
-					        		<input type="text" name="material_group" v-model="new_swift.material_group" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Description in SAP</label>
-					        		<input type="text" name="description_in_sap" v-model="new_swift.description_in_sap" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>MPG1</label>
-					        		<input type="text" name="mpg1" v-model="new_swift.mpg1" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Description in SAP</label>
-					        		<input type="text" name="second_description_in_sap" v-model="new_swift.second_description_in_sap" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>MPG2</label>
-					        		<input type="text" name="mpg2" v-model="new_swift.mpg2" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Item Category Group</label>
-					        		<input type="text" name="item_category_group" v-model="new_swift.item_category_group" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Material Statistics Group</label>
-					        		<input type="text" name="material_statistics_group" v-model="new_swift.material_statistics_group" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Valuation Class</label>
-					        		<input type="text" name="valuation_class" v-model="new_swift.valuation_class" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>BOM</label>
-					        		<input type="text" name="bom" v-model="new_swift.bom" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>BOM Usage</label>
-					        		<input type="text" name="bom_usage" v-model="new_swift.bom_usage" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>YKExx</label>
-					        		<input type="text" name="ykexx" v-model="new_swift.ykexx" class="form-control">
-					        	</div>
-					        	<div class="form-group">
-					        		<label>Value Field Mapping</label>
-					        		<input type="text" name="value_field_mapping" v-model="new_swift.value_field_mapping" class="form-control">
-					        	</div>
-					        </form>
-					     </div>
-					     <div class="modal-footer">
-					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					        <button type="button" class="btn btn-primary" v-on:click="addSwiftField(views[1].fields, new_swift.material_type + '_' + new_swift.material_group + '_' + new_swift.mpg1, new_swift)">Save changes</button>
-					     </div>
-			   		</div>
-			  	</div>
-			</div>
-			<!-- <div v-for="view in views" class="panel panel-default">
-			  
-			</div> -->
-		</div>
+	<div class="col-sm-2 col-md-2 dashboard-nav">
+		<nav class="navbar navbar-default navbar-fixed navbar-inverse">
+			<ul class="nav ">
+				<img src="../pictures/Assistant_logo.jpg">
+        		<li class="dashboard-menu"><router-link to="/"><span class="glyphicon glyphicon-tasks"></span>&nbsp;&nbsp;WSL Calculator</router-link></li>
+				<li class="dashboard-menu"><router-link to="/promo"><span class="glyphicon glyphicon-tags"></span>&nbsp;&nbsp;Promo List</router-link></li>
+				<li class="dashboard-menu"><router-link to="/reports"><span class="glyphicon glyphicon-stats"></span>&nbsp;&nbsp;Reports</router-link>
+				</li>
+				<div id="user">
+					<p>&nbsp;Logged in {{user.username | appendAs}}</p>
+					&nbsp;<a id="logout-link" href="/logout">Logout</a>
+				</div>
+			</ui>
+    	</nav>
 	</div>
+	<div class="col-sm-10 col-md-10 page-content">
 		
+			<router-view></router-view>
+		
+	</div>
+</div>
+<div id="homepage">
+	
+</div> -->
 
-	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-	<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
-	<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
-	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-	<script type="text/javascript" src="js/Sortable.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-	<script type="text/javascript" src="js/vuedraganddrop.js"></script>
-	<script type="text/javascript" src="js/vuedraggable.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="jszip/dist/jszip.js"></script>
-	<script src="js/dp/vue-app.js"></script>
-	<script type="text/javascript" src="admin/app.js"></script>
-	<script type="text/javascript" src="js/filters.js"></script>
-	<script type="text/javascript">
-		$('#raw-data').change(function(event){
-			readData(event);
-		});
-		$("#download-data").click(function(event){
-			downloadData();
-		})
-		$.getJSON( "data/output.json", function( data ) {
-			$.each( data, function(i, values) {
-			  	views.push(data[i]);
-			})
-			if (views.length > 0){
-				$(document).ready(function(){
-					views.forEach(function(view){
-					// var basic = document.getElementById("basic");
-						if (view.name != 'input'&& view.name != 'swift'){
-							Sortable.create(document.getElementById(view.name + 'body'), {
-								onEnd: function(evt){
-									var item = evt.item;
-									var id = evt.item.id;
-									var view_index = id.split("-")[0];
-									var field_index = id.split("-")[1];
-									var oldIndex = evt.oldIndex;
-									var newIndex = evt.newIndex;
-									var tempField = views[view_index].fields[field_index];
-									if (newIndex > oldIndex){
-										for (var i = oldIndex-1; i < newIndex; i++){
-											evt.target.children[i].id = view_index + "-" + (i - 1);
-											views[view_index].fields[i] = views[view_index].fields[i+1];
-										}
-										views[view_index].fields[newIndex - 1] = tempField;
-									} else {
-										for (var i = oldIndex - 1; i >= newIndex; i--){
-											views[view_index].fields[i] = views[view_index].fields[i-1];
-											evt.target.children[i].id = view_index + "-" + (i-1);
-										}
-										views[view_index].fields[newIndex-1] = tempField;
-									}
-									item.id = view_index + "-" + (newIndex-1);
-								}
-							});
-						}
+<div class="container" id="app">
+	<h1>Product Information System <small id="user"><span class="glyphicon glyphicon-user"></span> {{user.username}}
+		<p><a href="/logout">Log out</a></p></small></h1>
+	<div>
+		<button class="btn btn-success" v-on:click="saveData()">Save Changes</button>
+		<br>
+		<br>
+		<ul class="nav nav-tabs" role="tablist">
+	    	<li role="presentation" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views"><a :href="view.name | appendHash" :aria-controls="view.name" role="tab" data-toggle="tab">{{view.name | humanize}}</a></li>
+	  	</ul>
+	    <div class="tab-content">
+	    	<div role="tabpanel" class="tab-pane" v-bind:class="{ active: view_index==0 }" v-for="(view, view_index) in views" :id="view.name">
+	    		<div class="scrollable-table">
+	    			<table class="table" v-if="view.name != 'input' && view.name != 'swift'">
+				    	<thead>
+				    		<tr>
+				    			<th class="col-md-2">Field</td>
+				    			<th>Default Value</td>
+				    			<th>Type</th>
+				    			<th>Action</th>
+				    			<th>Condition</th>
+				    		</tr>
+				    	</thead>
+				    	<tbody :id="view.name | body">
+					    	<tr>
+					    		<td class="col-md-2">
+					    			<input class="form-control"  type="text" name="key" v-model="newfield.key">
+					    		</td>
+					    		<td>
+					    			<input class="form-control"  type="text" name="value" v-model="newfield.value" placeholder="value1,value2,value3">
+					    		</td>
+					    		<td>
+					    			<select class="form-control" v-model="newfield.type">
+					    				<option value="default_field">DEFAULT FIELD</option>
+					    				<option value="filled_field">FILLED FIELD</option>
+					    				<option value="multiplying_field">MULTIPLYING FIELD</option>
+					    				<option value="swift_field">SWIFT FIELD</option>
+					    			</select>
+					    		</td>
+					    		<td>
+					    			<button class="btn btn-default" v-on:click="addField(view.fields, newfield.key, newfield.value, newfield.type)">Add Value</button>
+					    		</td>
+						    	<td>
+						    		<!-- <input class="col-sm-5 form-control" type="text" name="condition" v-model="newfield.condition"> -->
+						    		
+				    			</td>
+						    </tr>
+						    
+						    
+				    		<tr v-for="(field, field_index) in view.fields" :id="view_index + '-' + field_index">
+				    			<!-- <template v-for="(value, key) in field"> -->
+				    				<template v-if="typeof field.value === 'string'">
+					    				<td class="col-md-2 drag-handle"><span class="glyphicon glyphicon-move"></span>  {{field.field}}</td>
+						    			<td > 
+						    				<p v-if="typeof field.value === 'string'">
+						    					<input class="form-control" type="text" :value="field.value" v-model="field.value">
+						    				</p> 
+						    				<!-- <p v-if="typeof value.value === 'object'">
+						    					<input class="form-control" type="" name="" v-model="new_condition.value" placeholder="value1,value2">
+						    					IF
+						    					<input class="form-control" type="" name="" v-model="new_condition.condition" placeholder="division=CPD">
+						    					<button v-on:click="createCondition(value.value, new_condition.condition, new_condition.value)">Save</button>
+						    				</p>
+						    				<p v-if="typeof value.value === 'object'" v-for="(condition_value, condition_key) in value.value">
+						    					<input class="form-control" type="text" name="" v-model="value.value[condition_key]">
+						    					IF
+						    					<input class="form-control" type="text" name="" v-model="condition_key" placeholder="material_group=110">
+						    				</p> -->
+						    			</td>
+						    			<td >
+						    				<select class="form-control" v-model="field.type">
+						    					<option value="default_field">DEFAULT FIELD</option>
+						    					<option value="filled_field">FILLED FIELD</option>
+						    					<option value="multiplying_field">MULTIPLYING FIELD</option>
+						    					<option value="swift_field">SWIFT FIELD</option>
+						    				</select>
+						    			 <!-- <span>{{field.type | humanize}}</span> </td> -->
+						    			<td >
+						    				<button class="btn btn-danger" v-on:click="deleteField(view, field.field, field_index)">Delete</button>
+						    				
+						    			</td>
+						    			<td>
+						    				<button class="btn btn-default" v-on:click="addCondition(view.fields[field_index])" v-if="field.type != 'filled_field'">Add Condition</button>
+						    			</td>
+					    			</template>
+					    			<template v-else>
+					    				<td class="col-md-2 drag-handle"><span class="glyphicon glyphicon-sort"></span>  {{field.field}}</td>
+						    			<td > 
+						    				<!-- <p v-if="typeof value.value === 'string'">
+						    					<input class="form-control" type="text" :value="value" v-model="view.fields[key].value">
+						    				</p> --> 
+						    				<p v-if="typeof field.value === 'object'">
+						    					<input class="form-control" type="" name="" v-model="new_condition.value" placeholder="value1,value2">
+						    				</p>
+						    				<p v-if="typeof field.value === 'object'">
+						    					<input class="form-control" type="text" name=""  v-for="(condition_value, condition_key) in field.value" v-model="field.value[condition_key]">
+						    				</p>
+						    			</td>
+						    			<td >
+						    				<select class="form-control" v-model="field.type">
+						    					<option value="default_field">DEFAULT FIELD</option>
+						    					<option value="filled_field">FILLED FIELD</option>
+						    					<option value="multiplying_field">MULTIPLYING FIELD</option>
+						    					<option value="swift_field">SWIFT FIELD</option>
+						    				</select>
+						    			</td>
+						    			<td >
+						    				<button class="btn btn-danger" v-on:click="deleteField(view, field.field, field_index)">Delete</button>
+						    				<!-- <button v-on:click="addCondition(view.fields, key)">Add Condition</button> -->
+						    			</td>
+						    			<td>
+							    			<div class="input-group">
+							    				<input class="form-control" type="" name="" v-model="new_condition.condition" placeholder="division=cpd">
+							    				<span class="input-group-btn">
+						    						<button class="btn btn-success" v-on:click="createCondition(field.value, new_condition.condition, new_condition.value)">Save</button>
+						    					</span>
+						    					<span class="input-group-btn">
+						    						<button class="btn btn-default" v-on:click="removeCondition(view, field_index)">No Condition</button>
+						    					</span>
+							    			</div>
+						    				
+						    					<!-- <button class="btn btn-success" v-on:click="createCondition(value.value, new_condition.condition, new_condition.value)">Save</button> -->
+						    				<p >
+						    					<div class="input-group" v-for="(condition_value, condition_key, condition_index) in field.value" >
+							    					<input class="form-control" type="text" name="" v-model="condition_key" v-on:change="updateKey(field.value, condition_key, condition_value, condition_index)" >
+							    					<span class="input-group-btn">
+							    						<button class="btn btn-danger" type="button" v-on:click="deleteCondition(field.value, condition_key)">Delete Condition</button>
+							    					</span>
+						    					
+						    					</div>
+						    				</p>
+					    					
+						    			</td>
+					    			</template>
+				    			<!-- </template> -->
+				    			
+				    		</tr>
+				    		<!-- </draggable> -->
+				    		</template>
+				    	</tbody>
+			    	</table>
+			    	<table class="table" v-if="view.name == 'input'">
+			    		<thead>
+			    			<tr>
+			    				<th>Name</th>
+			    				<th>Creator</th>
+			    				<th>Marketing</th>
+			    				<th>Business Controller</th>
+			    				<th>Action</th>
+			    			</tr>
+			    		</thead>
+			    		<tbody>
+			    			<tr>
+			    				<td><input type="text" name="" class="form-control" v-model="new_input_field.key"></td>
+			    				<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="new_input_field.creator_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+			    				<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="new_input_field.marketing_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+								<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="new_input_field.bc_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+			    				<td><button class="btn btn-default" v-on:click="addInputField()">Add Input Field</button></td>
+			    			</tr>
+			    			<tr v-for="(value, key) in view.fields">
+			    				<td>{{key}}</td>
+			    				<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="value.creator_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+			    				<!-- <td>{{value.creator_editable}}</td> -->
+			    				<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="value.marketing_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+								<td><div class="ui left floated compact segment">
+									  <div class="ui fitted toggle checkbox">
+									    <input type="checkbox" v-model="value.bc_editable">
+									    <label></label>
+									  </div>
+									</div>
+								</td>
+			    				<td><button class="btn btn-danger" v-on:click="deleteField(view, key, key)">Delete</button></td>
+			    			</tr>
+			    		</tbody>
+			    	</table>
+			    	<div v-if="view.name == 'swift'">
+			    		<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Add New</button>
+			    		<button class="btn btn-default" v-on:click="edit = true" v-if="edit == false">Edit</button>
+			    		<button class="btn btn-success" v-on:click="edit = false" v-if="edit == true">Done</button>
+			    	</div>
+			    	<table class="table table-striped" v-if="view.name == 'swift'">
+			    		
+
 						
-					})
-				})
-				
-			}
-				
-			
+			    		<thead>
+			    			<tr>
+			    				<!-- <th>Key</th> -->
+			    				<th>Material Type</th>
+			    				<th>Description</th>
+			    				<th>Material Group</th>
+			    				<th>Description in SAP</th>
+			    				<th>MPG1</th>
+			    				<th>Description in SAP</th>
+			    				<th>MPG2</th>
+			    				<th>Item Category Group</th>
+			    				<th>Material Statistics Group</th>
+			    				<th>Valuation Class</th>
+			    				<th>BOM</th>
+			    				<th>BOM Usage</th>
+			    				<th>YKExx</th>
+			    				<th>Value Field Mapping</th>
+			    				<th>Action</th>
+			    			</tr>
+			    		</thead>
+			    		<tbody>
+			    			<tr v-for="(item, key, item_index) in view.fields">
+			    				<!-- <td>{{key}}</td> -->
+			    				<td v-for="(value, key) in item" v-if="key != 'key'">
+			    					<p v-show="edit == false" > {{value}} </p>
+		        					<input class="form-control" v-if="edit == true" type="text" :name="value" v-model="item[key]">
+			    				</td>
+			    				<td><button class="btn btn-danger" v-on:click="deleteField(view, item.field.field, item_index)">Delete</button></td>
+			    				<!-- <td>{{value.material_type}}</td>
+			    				<td>{{value.description}}</td>
+			    				<td>{{value.material_group}}</td>
+			    				<td>{{value.description_in_sap}}</td>
+			    				<td>{{value.mpg1}}</td>
+			    				<td>{{value.second_description_in_sap}}</td>
+			    				<td>{{value.mpg2}}</td>
+			    				<td>{{value.item_category_group}}</td>
+			    				<td>{{value.material_statistics_group}}</td>
+			    				<td>{{value.valuation_class}}</td>
+			    				<td>{{value.bom}}</td>
+			    				<td>{{value.bom_usage}}</td>
+			    				<td>{{value.ykexx}}</td>
+			    				<td>{{value_field_mapping}}</td> -->
+			    			</tr>
+			    		</tbody>
+			    	</table>
+	    		</div>
+		    	
+	    	</div>
+	  	</div>
+	  	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		 	<div class="modal-dialog modal-lg" role="document">
+		    	<div class="modal-content">
+		    		<div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+				     </div>
+				     <div class="modal-body">
+				        <form>
+				        	<div class="form-group">
+				        		<label>Material Type</label>
+				        		<input type="text" name="material_type" v-model="new_swift.material_type" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Description</label>
+				        		<input type="text" name="description" v-model="new_swift.description" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Material Group</label>
+				        		<input type="text" name="material_group" v-model="new_swift.material_group" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Description in SAP</label>
+				        		<input type="text" name="description_in_sap" v-model="new_swift.description_in_sap" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>MPG1</label>
+				        		<input type="text" name="mpg1" v-model="new_swift.mpg1" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Description in SAP</label>
+				        		<input type="text" name="second_description_in_sap" v-model="new_swift.second_description_in_sap" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>MPG2</label>
+				        		<input type="text" name="mpg2" v-model="new_swift.mpg2" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Item Category Group</label>
+				        		<input type="text" name="item_category_group" v-model="new_swift.item_category_group" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Material Statistics Group</label>
+				        		<input type="text" name="material_statistics_group" v-model="new_swift.material_statistics_group" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Valuation Class</label>
+				        		<input type="text" name="valuation_class" v-model="new_swift.valuation_class" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>BOM</label>
+				        		<input type="text" name="bom" v-model="new_swift.bom" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>BOM Usage</label>
+				        		<input type="text" name="bom_usage" v-model="new_swift.bom_usage" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>YKExx</label>
+				        		<input type="text" name="ykexx" v-model="new_swift.ykexx" class="form-control">
+				        	</div>
+				        	<div class="form-group">
+				        		<label>Value Field Mapping</label>
+				        		<input type="text" name="value_field_mapping" v-model="new_swift.value_field_mapping" class="form-control">
+				        	</div>
+				        </form>
+				     </div>
+				     <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary" v-on:click="addSwiftField(views[1].fields, new_swift.material_type + '_' + new_swift.material_group + '_' + new_swift.mpg1, new_swift)"  data-dismiss="modal">Save changes</button>
+				     </div>
+		   		</div>
+		  	</div>
+		</div>
+		<!-- <div v-for="view in views" class="panel panel-default">
+		  
+		</div> -->
+	</div>
+</div>
+	
 
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script type="text/javascript" src="js/checkbox.min.js"></script>
+<script type="text/javascript" src="js/Sortable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript" src="js/vuedraganddrop.js"></script>
+<script type="text/javascript" src="js/vuedraggable.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="jszip/dist/jszip.js"></script>
+<script src="js/dp/vue-app.js"></script>
+<script type="text/javascript" src="admin/app.js"></script>
+<script type="text/javascript" src="js/filters.js"></script>
+<script type="text/javascript">
+	 window.onbeforeunload = function ()
+	 {
+	     return "";
+	 };
+	$('#raw-data').change(function(event){
+		readData(event);
+	});
+	$("#download-data").click(function(event){
+		downloadData();
+	})
+	$.getJSON( "data/output.json", function( data ) {
+		$.each( data, function(i, values) {
+		  	views.push(data[i]);
+		})
+		if (views.length > 0){
+			$(document).ready(function(){
+				views.forEach(function(view){
+				// var basic = document.getElementById("basic");
+					if (view.name != 'input'&& view.name != 'swift'){
+						Sortable.create(document.getElementById(view.name + 'body'), {
+							handle: ".drag-handle",
+							onEnd: function(evt){
+								var item = evt.item;
+								var id = evt.item.id;
+								var view_index = id.split("-")[0];
+								var field_index = id.split("-")[1];
+								var oldIndex = evt.oldIndex;
+								var newIndex = evt.newIndex;
+								var tempField = views[view_index].fields[field_index];
+								if (newIndex > oldIndex){
+									for (var i = oldIndex-1; i < newIndex; i++){
+										evt.target.children[i].id = view_index + "-" + (i - 1);
+										views[view_index].fields[i] = views[view_index].fields[i+1];
+									}
+									views[view_index].fields[newIndex - 1] = tempField;
+								} else {
+									for (var i = oldIndex; i >= newIndex; i--){
+										views[view_index].fields[i-1] = views[view_index].fields[i-2];
+										evt.target.children[i].id = view_index + "-" + (i-1);
+									}
+									views[view_index].fields[newIndex-1] = tempField;
+								}
+								item.id = view_index + "-" + (newIndex-1);
+							}
+						});
+					}
+					
+				})
+
+			})
+			
+		}
+			
+		
+
+	});
+	$(document).ready(function(){
+		$.ajax({
+			url: '/getuser',
+			type: 'GET',
+			success: function(data){
+				for (field in data){
+					Vue.set(app.user, field, data[field]);
+				}
+			}
 		});
-		
-			
-			
-			// views.forEach(function(view){
-			// 	var placeholder = view.fields[draggedElement.id];
-			// 	view.fields.$set(draggedElement.id, view.fields[droppedOnElement.id]);
-			// 	view.fields.$set(droppedOnElement.id, placeholder);
-			// })
+	})
 		
 		
-		// $.getJSON( "data/edit.json", function( data ) {
-		// 	$.each( data, function(i, values) {
-		// 	  	edits.push(data[i]);
-		// 	});
-		// });
-	</script>
+		// views.forEach(function(view){
+		// 	var placeholder = view.fields[draggedElement.id];
+		// 	view.fields.$set(draggedElement.id, view.fields[droppedOnElement.id]);
+		// 	view.fields.$set(droppedOnElement.id, placeholder);
+		// })
+	
+	
+	// $.getJSON( "data/edit.json", function( data ) {
+	// 	$.each( data, function(i, values) {
+	// 	  	edits.push(data[i]);
+	// 	});
+	// });
+</script>
 
 </body>
 </html>

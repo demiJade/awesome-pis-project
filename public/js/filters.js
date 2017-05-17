@@ -23,7 +23,11 @@ Vue.filter('round', function(x){
 });
 
 Vue.filter('displayDateInWordsWithTime', function(x){
-	return moment(x).format('MMM Do YYYY, h:mm a');;
+  if (x == undefined || x == ""){
+    return " ";
+  } else {
+    return moment(x).format('MMM Do YYYY, h:mm a');
+  }
 });
 
 Vue.filter('displayDateInWords', function(x){
