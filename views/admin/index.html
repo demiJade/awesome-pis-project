@@ -43,12 +43,16 @@
 </div> -->
 
 <div class="container" id="app">
-	<h1>Product Information System 
-		<small id="user">
-			<span class="glyphicon glyphicon-user"></span> {{user.username}}
-			<p><a href="/logout">Log out</a></p>
-			<p><a href="/change_password">Change Password</a></p>
-		</small></h1>
+	<div class="jumbotron">
+		<h1>Product Information System 
+			<small id="user">
+				<span class="glyphicon glyphicon-user"></span> {{user.username}} <br>
+				<span><a href="/logout">Log out</a></span> <br>
+				<span><a href="/change_password">Change Password</a></span>
+			</small>
+		</h1>
+	</div>
+	
 	<div>
 		<button class="btn btn-success" v-on:click="saveData()">Save Changes</button>
 		<br>
