@@ -77,6 +77,7 @@ var app = new Vue({
 					for (var i = 0; i < lines.length; i++){
 						var obj = {};
 						var values = lines[i].split(",");
+						values = values.map(removeCarriage);
 						for (var j = 0; j < headers.length; j++){
 							obj[headers[j]] = values[j];
 						}
@@ -89,24 +90,41 @@ var app = new Vue({
 		}, 
 		saveBatch: function(){
 			var vm = this;
-			
-			$.ajax({
-				url: '/createbatch',
-				type: 'POST',
-				data: {
-					batch: vm.batch
-				},
-				success: function(data){
-					vm.batches.push(data);
-					console.log(data);
-					toastr.success("Batch created");
-					vm.batch = {
-						division: "",
-						brand: "",
-						items: []
-					}
+			var batches = {
+				cpd_batch: {},
+				ppd_batch: {},
+				lld_batch: {}
+			};
+			for (field in vm.batch){
+				batches.cpd_batch[field] = vm.batch[field];
+				batches.ppd_batch[field] = vm.batch[field];
+				batches.lld_batch[field] = vm.batch[field];
+			}
+			batches.cpd_batch.items = vm.batch.items.filter(getDivisionOf("CPD"));
+			batches.ppd_batch.items = vm.batch.items.filter(getDivisionOf("PPD"));
+			batches.lld_batch.items = vm.batch.items.filter(getDivisionOf("LLD"));
+			for (division in batches){
+				if (batches[division].items.length > 0){
+					$.ajax({
+						url: '/createbatch',
+						type: 'POST',
+						data: {
+							batch: batches[division]
+						},
+						success: function(data){
+							vm.batches.push(data);
+							console.log(data);
+							toastr.success("Batch created");
+							vm.batch = {
+								division: "",
+								brand: "",
+								items: []
+							}
+						}
+					});
 				}
-			});
+			}
+			
 		},
 		view: function(batch, index){
 			var vm = this;
@@ -374,4 +392,9 @@ var downloadData = function(outputData, callback){
 
 function normalize(value){
 	return value.replace(/\s|-/g, "_").toLowerCase();
+}
+var getDivisionOf = function(division){
+	return function(item){
+		return item.division == division;
+	}
 }

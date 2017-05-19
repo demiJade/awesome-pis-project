@@ -102,6 +102,7 @@ app.post('/savefile', function(req, res){
 
 app.post('/createbatch', function(req, res){
 	var batch = req.body.batch;
+	console.log(batch);
 	batch['created_by'] = req.user.username;
 	batch['created_on'] = new Date();
 	MongoClient.connect(url, function(err, db){
@@ -109,10 +110,12 @@ app.post('/createbatch', function(req, res){
 		batches.insert(batch).then(function(){
 			batches.findOne({created_by: batch.created_by, created_on: batch.created_on}).then(function(batch){
 				res.send(batch);
-			})
+			});
 		});
 	});
 });
+
+
 
 app.post('/extracted_batch', function(req, res){
 	var created_by = req.body.created_by;
