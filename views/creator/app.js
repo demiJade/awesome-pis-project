@@ -65,7 +65,7 @@ var app = new Vue({
 			var f = event.target.files[0];
 			if (f) {
 			    var r = new FileReader();
-
+			    
 			    r.onload = function(e) {
 			    	var contents = e.target.result;
 					var lines = contents.split('\n');
@@ -80,10 +80,23 @@ var app = new Vue({
 						values = values.map(removeCarriage);
 						for (var j = 0; j < headers.length; j++){
 							obj[headers[j]] = values[j];
+							if (headers[j] == "standard_cost"){
+								if (values[j].includes(",")){
+									toastr.error("Error in format of standard cost for " + obj["sap_code"] + ".\n Please ensure that standard cost does not have a comma.");
+								}
+								if (!values[j].includes(".")){
+									toastr.error("Error in format of standard cost for " + obj["sap_code"] + 
+										".\n Please ensure that standard cost have two decimal points");
+								}
+							}
 						}
 						vm.batch.items.push(obj);
 					}
 					console.log(rawData);
+					var elem = document.getElementById("raw-data");
+		            elem.value = "";
+		            var elem = document.getElementById("raw-data" + "-label");
+		            elem.innerHTML = f.name;
 			    }
 			    var text = r.readAsText(f);
 			}

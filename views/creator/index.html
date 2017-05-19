@@ -45,7 +45,7 @@
 		<p><a href="/logout">Log out</a></p></small></h1>
 		<form class="form-inline">
 			<div class="form-group">
-				<label for="raw-data" >Import Raw File</label>
+				<label for="raw-data-label" >Import Raw File</label>
 				<input type="file" id="raw-data" v-on:change="readData()">
 			</div>
 			<!-- <label>Role</label>
@@ -67,8 +67,8 @@
 					<th>Marketing Approved</th>
 					<th>BC Approved</th>
 					<th>Extracted On</th>
-					<!-- <th>Division</th>
-					<th>Brand</th> -->
+					<th>Division</th>
+					<th>Signature</th>
 					<th>Days Pending</th>
 					<th>Action</th>
 				</tr>
@@ -81,8 +81,8 @@
 					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.marketing_approved == true"></span></td>
 					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.bc_approved == true"></span></td>
 					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
-				<!-- 	<td>{{batch.division}}</td>
-					<td>{{batch.brand}}</td> -->
+					<td>{{batch.division}}</td>
+					<td>{{batch.signature}}</td>
 					<td v-if="batch.extracted_on == ''">{{ Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) }}</td>
 					<td v-else>Extracted by: {{batch.extracted_by}}</td>
 					<td class="col-md-2">

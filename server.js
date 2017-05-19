@@ -102,7 +102,8 @@ app.post('/savefile', function(req, res){
 
 app.post('/createbatch', function(req, res){
 	var batch = req.body.batch;
-	console.log(batch);
+	batch.division = batch.items[0].division;
+	batch.signature = batch.items[0].signature;
 	batch['created_by'] = req.user.username;
 	batch['created_on'] = new Date();
 	MongoClient.connect(url, function(err, db){
