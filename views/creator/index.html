@@ -43,9 +43,9 @@
 	<div class="container" id="app">
 		<h1>Product Information System <small id="user"><span class="glyphicon glyphicon-user"></span> {{user.username}}
 		<p><a href="/logout">Log out</a></p></small></h1>
-		<form class="form-inline">
+		<div class="form-inline">
 			<div class="form-group">
-				<label for="raw-data-label" >Import Raw File</label>
+				<label id="raw-data-label" for="raw-data" >Import Raw File</label>
 				<input type="file" id="raw-data" v-on:change="readData()">
 			</div>
 			<!-- <label>Role</label>
@@ -56,7 +56,7 @@
 	        </select>
 	        <input type="text" id="raw-data" class="form-control" v-model="batch.brand"> -->
 			<button class="btn btn-default" v-on:click="saveBatch()">Create</button>
-		</form>
+		</div>
 		<br>
 		<table class="table">
 			<thead>

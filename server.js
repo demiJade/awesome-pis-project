@@ -107,16 +107,65 @@ app.post('/createbatch', function(req, res){
 	batch['created_by'] = req.user.username;
 	batch['created_on'] = new Date();
 	MongoClient.connect(url, function(err, db){
-		var batches = db.collection("batches");
-		batches.insert(batch).then(function(){
-			batches.findOne({created_by: batch.created_by, created_on: batch.created_on}).then(function(batch){
-				res.send(batch);
-			});
-		});
+		db.collection("tempbatches").insert(batch).then(function(){
+			db.collection("tempbatches").mapReduce(mapByDivisionBrand, reduceByDivisionBrand, {
+				out: {
+					replace: "formattedTempBatches"
+				}
+			}, function(){
+				db.collection("formattedTempBatches").find().toArray(function(err, batches){
+					batches.forEach(function(batch){
+						var new_batch = {
+							created_by: batch._id.created_by,
+							created_on: batch._id.created_on,
+							division: batch._id.division,
+							signature: batch._id.signature,
+							marketing_approved: false,
+							bc_approved: false,
+							extracted_on: '',
+							items: []
+						}
+						batch.value.items.forEach(function(item){
+							new_batch.items.push(item);
+						});
+						db.collection("batches").insert(new_batch).then(function(){
+							db.collection("tempbatches").remove({}, function(){
+								db.close();
+							});
+						});
+					})
+					db.collection("batches").find({created_by: batch.created_by, created_on: batch.created_on}).toArray(function(err, batches){
+						res.send(batches);
+					});
+				})
+			})
+		})	
 	});
 });
 
+var mapByDivisionBrand = function(){
+	var key = {
+		created_by: this.created_by,
+		created_on: this.created_on
+	}
+	this.items.forEach(function(item){
+		key.division = item.division;
+		key.signature = item.signature;
+		emit(key, {items:[item]});
+	});
+}
 
+var reduceByDivisionBrand = function(key, values){
+	var items = [];
+	values.forEach(function(value){
+		value.items.forEach(function(x){
+			items.push(x);
+		})
+	})
+	return {
+		items: items
+	}
+}
 
 app.post('/extracted_batch', function(req, res){
 	var created_by = req.body.created_by;
