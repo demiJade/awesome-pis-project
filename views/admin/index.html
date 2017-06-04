@@ -95,6 +95,11 @@
 					    				<option value="swift_field">SWIFT FIELD</option>
 					    			</select>
 					    		</td>
+					    		<!-- <td>
+					    			<p v-for="(item, index) in newfield.choices">
+					    				<input class="" type="text" name="" v-model="item">
+					    			</p>
+					    		</td> --> <!-- Set of choices that the field can have -->
 					    		<td>
 					    			<button class="btn btn-default" v-on:click="addField(view.fields, newfield.key, newfield.value, newfield.type)">Add Value</button>
 					    		</td>
@@ -142,7 +147,7 @@
 						    			</td>
 					    			</template>
 					    			<template v-else>
-					    				<td class="col-md-2 drag-handle"><span class="glyphicon glyphicon-sort"></span>  {{field.field}}</td>
+					    				<td class="col-md-2 drag-handle"><span class="glyphicon glyphicon-move"></span>  {{field.field}}</td>
 						    			<td > 
 						    				<!-- <p v-if="typeof value.value === 'string'">
 						    					<input class="form-control" type="text" :value="value" v-model="view.fields[key].value">
@@ -435,6 +440,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 <script type="text/javascript" src="js/checkbox.min.js"></script>
 <script type="text/javascript" src="js/Sortable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

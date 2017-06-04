@@ -59,21 +59,17 @@ var app = new Vue({
 			var vm = this;
 			var objectValue = {
 				value: value,
-				type: type
+				type: type,
+				field: key
 			};
-			var object = {};
-			object[key] = {
-				value: value,
-				type: type
-			};
-			array.push(object);
+			array.push(objectValue);
 			vm.newfield = {};
 		},
 		deleteField: function(view, name, index){
 			var message = "Are you sure you want to delete " + name + " from the set of fields for" + view.name + "?";
 	        var result = confirm(message);
 	        if (result){
-	        	if (typeof view.fields === 'array'){
+	        	if (Array.isArray(view.fields)){
 	        		view.fields.splice(index, 1);
 	        	} else if (typeof view.fields === 'object'){
 	        		Vue.delete(view.fields, name)

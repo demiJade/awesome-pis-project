@@ -162,8 +162,31 @@ var app = new Vue({
 			});
 		},
 		setMarketingApproved: function(index){
-			batches[index].marketing_approved = true;
-			this.saveEdit(index);
+			var error = false;
+			var vm = this;
+			batches[index].items.forEach(function(item){
+				for (field in item){
+					if (views[0].fields[field].marketing_editable == true){
+						if (item[field] == "" && fi){
+							toastr.error("Missing " + field + " for " + item.sap_code);
+							error = true;
+						}
+					}
+				}
+			});
+			if (!error){
+				batches[index].marketing_approved = true;
+				vm.saveEdit(index);
+				$('#openModal' + index).modal('hide');
+			}
+		},
+		computeListPrice: function(batch_index, item_index, key){
+			var obj = batches[batch_index].items[item_index];
+			var decimal_keys = ["standard_cost", "fob_price", "freight_cost", "customs", "royalty", "stickering_cost", "srp", "margin", "vat", "list_price"];
+			if (decimal_keys.includes(key)){
+				obj[key] = formatDecimalPlaces(obj[key], 2);
+			}
+			batches[batch_index].items[item_index].list_price = (obj.srp * (1 - ((obj.margin + obj.vat)/100))).toFixed(2);
 		}
 	}
 })

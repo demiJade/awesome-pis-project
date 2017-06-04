@@ -50,32 +50,32 @@
             "fob_price": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "fob_currency": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "freight_cost": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "customs": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "royalty": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "stickering_cost": {
                 "marketing_editable": false,
                 "creator_editable": true,
-                "bc_editable": false
+                "bc_editable": true
             },
             "currency": {
                 "marketing_editable": false,
@@ -103,12 +103,32 @@
                 "bc_editable": false
             },
             "division": {
-                "creator_editable": true,
+                "creator_editable": false,
                 "marketing_editable": false,
                 "bc_editable": false
             },
             "signature": {
+                "creator_editable": false,
+                "marketing_editable": false,
+                "bc_editable": false
+            },
+            "vat": {
                 "creator_editable": true,
+                "marketing_editable": true,
+                "bc_editable": false
+            },
+            "conversion_rate": {
+                "creator_editable": true,
+                "marketing_editable": false,
+                "bc_editable": true
+            },
+            "margin": {
+                "creator_editable": true,
+                "marketing_editable": true,
+                "bc_editable": false
+            },
+            "category": {
+                "creator_editable": false,
                 "marketing_editable": false,
                 "bc_editable": false
             }
@@ -1139,11 +1159,6 @@
                 "type": "default_field"
             },
             {
-                "field": "something",
-                "value": "new_save",
-                "type": "filled_field"
-            },
-            {
                 "field": "ProdH",
                 "value": "product_hierarchy",
                 "type": "filled_field"
@@ -1673,7 +1688,7 @@
             },
             {
                 "field": "TGroup",
-                "value": "001",
+                "value": "0001",
                 "type": "default_field"
             },
             {
@@ -1795,7 +1810,25 @@
             },
             {
                 "field": "PDT",
-                "value": "14",
+                "value": {
+                    "vendor=IOR199": "23",
+                    "vendor=CHI460": "23",
+                    "vendor=701220": "23",
+                    "vendor=700564": "23",
+                    "vendor=BCH164": "23",
+                    "vendor=PCO899": "45",
+                    "vendor=OAE507": "45",
+                    "vendor=COS806": "60",
+                    "vendor=COS801": "48",
+                    "vendor=COS827": "48",
+                    "vendor=NOA332": "23",
+                    "vendor=CDF160": "14",
+                    "vendor=700070": "23",
+                    "vendor=COS824": "48",
+                    "vendor=C61462": "40",
+                    "vendor=PSA153": "23",
+                    "vendor=COS060": "48"
+                },
                 "type": "default_field"
             },
             {
@@ -2061,32 +2094,32 @@
             {
                 "field": "SalesOrg",
                 "value": "P100",
-                "type": "default_fields"
+                "type": "default_field"
             },
             {
                 "field": "DChnl",
                 "value": "02",
-                "type": "default_fields"
+                "type": "default_field"
             },
             {
                 "field": "RSP",
                 "value": "srp",
-                "type": "filled_fields"
+                "type": "filled_field"
             },
             {
                 "field": "ValidFrom",
                 "value": "today",
-                "type": "filled_fields"
+                "type": "default_field"
             },
             {
                 "field": "ValidTo",
                 "value": "31.12.9999",
-                "type": "default_fields"
+                "type": "default_field"
             },
             {
                 "field": "Material",
                 "value": "sap_code",
-                "type": "filled_fields"
+                "type": "filled_field"
             }
         ]
     }

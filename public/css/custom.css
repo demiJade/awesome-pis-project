@@ -79,3 +79,19 @@ span.glyphicon.glyphicon-user {
 .center {
     text-align: center
 }
+
+input.form-control {
+    width: auto;
+}
+
+.modal-lg {
+    width: 95%;
+    font-size: 12px;
+}
+
+
+
+.fixed {
+    position: fixed;
+}
+

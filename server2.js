@@ -57,7 +57,7 @@ app.get('/signin', function(req, res){
 	res.sendFile(path.join(__dirname, 'views', 'signin.html'));
 });
 
-app.get('/register_user', authenticatedMiddleware, function(req, res){
+app.get('/register_user', function(req, res){
 	res.sendFile(path.join(__dirname, 'views', 'register.html'));
 });
 
@@ -93,58 +93,32 @@ app.post('/readfile/:collection', function(req, res){
     });
 });
 
-app.post('/savefile', authenticatedMiddleware, function(req, res){
+app.post('/savefile', function(req, res){
 	var json = req.body.content;
-	if (req.user.role == 'admin'){
-		fs.writeFile('public/data/output.json', json, function(){
-			res.send("Data saved");
-		});
-	}
-});
-
-app.post('/createbatch', authenticatedMiddleware, function(req, res){
-	var batch = req.body.batch;
-	batch['created_by'] = req.user.username;
-	batch['created_on'] = new Date();
-	MongoClient.connect(url, function(err, db){
-		db.collection("tempbatches").insert(batch).then(function(){
-			db.collection("tempbatches").mapReduce(mapByDivisionBrandCategory, reduceByDivisionBrandCategory, {
-				out: {
-					replace: "formattedTempBatches"
-				}
-			}, function(){
-				db.collection("formattedTempBatches").find().toArray(function(err, batches){
-					batches.forEach(function(batch){
-						var new_batch = {
-							created_by: batch._id.created_by,
-							created_on: batch._id.created_on,
-							division: batch._id.division,
-							signature: batch._id.signature,
-							category: batch._id.category,
-							marketing_approved: false,
-							bc_approved: false,
-							extracted_on: '',
-							items: []
-						}
-						batch.value.items.forEach(function(item){
-							new_batch.items.push(item);
-						});
-						db.collection("batches").insert(new_batch).then(function(){
-							db.collection("tempbatches").remove({}, function(){
-								db.close();
-							});
-						});
-					})
-					db.collection("batches").find({created_by: batch.created_by, created_on: batch.created_on}).toArray(function(err, batches){
-						res.send(batches);
-					});
-				})
-			})
-		})	
+	fs.writeFile('public/data/output.json', json, function(){
+		res.send("Data saved");
 	});
 });
 
-var mapByDivisionBrandCategory = function(){
+app.post('/createbatch', function(req, res){
+	var batch = req.body.batch;
+	batch.division = batch.items[0].division;
+	batch.signature = batch.items[0].signature;
+	batch['created_by'] = req.user.username;
+	batch['created_on'] = new Date();
+	MongoClient.connect(url, function(err, db){
+		batch.items.forEach(function(item){
+			item.created_by = batch.created_by;
+			item.created_on = batch.created_on;
+			item.marketing_approved = false;
+			item.bc_approved = false;
+			db.collection("items").insert(item);	
+		})
+		db.close();
+	});
+});
+
+var mapByDivisionBrand = function(){
 	var key = {
 		created_by: this.created_by,
 		created_on: this.created_on
@@ -152,19 +126,11 @@ var mapByDivisionBrandCategory = function(){
 	this.items.forEach(function(item){
 		key.division = item.division;
 		key.signature = item.signature;
-		key.category = item.category;
-		item.standard_cost = Number(Math.round(Number(item.fob_price) * Number(item.conversion_rate) * (1 + (Number(item.freight_cost) + Number(item.customs) + Number(item.royalty))/100) + Number(item.stickering_cost)+'e2')+'e-2');
-		item.srp = "";
-		item.margin = "";
-		item.vat = 12.00;
-		item.list_price = "";
-		item.product_hierarchy = "";
-		item.currency = "PHP";
 		emit(key, {items:[item]});
 	});
 }
 
-var reduceByDivisionBrandCategory = function(key, values){
+var reduceByDivisionBrand = function(key, values){
 	var items = [];
 	values.forEach(function(value){
 		value.items.forEach(function(x){
@@ -190,23 +156,23 @@ app.post('/extracted_batch', function(req, res){
 });
 
 
-app.get('/getbatches', authenticatedMiddleware, function(req, res){
+app.get('/getitems', function(req, res){
 	MongoClient.connect(url, function(err, db){
-		var collection = db.collection("batches");
+		var collection = db.collection("items");
 		var batches = [];
-		collection.find({}).toArray(function (err, results){
+		collection.find({},{'_id':0}).toArray(function (err, results){
 			res.send(results);
 		});
 	});
 });
 
-app.post('/deletebatch', authenticatedMiddleware, function(req, res){
+app.post('/deletebatch', function(req, res){
 	var filter = req.body.filter;
 	filter.created_on = new Date(filter.created_on);
 	console.log(filter);
 	MongoClient.connect(url, function(err, db){
 		var collection = db.collection('batches');
-		collection.remove({"_id": new mongo.ObjectId(filter._id)}, function(){
+		collection.remove(filter, function(){
 			res.send("Deleted");
 			console.log("Deleted");
 			db.close();
@@ -214,27 +180,25 @@ app.post('/deletebatch', authenticatedMiddleware, function(req, res){
 	});
 });
 
-app.get('/getuser', authenticatedMiddleware, function(req, res){
+app.get('/getuser', function(req, res){
 	res.send(req.user);
 });
 
-app.post('/editbatch', authenticatedMiddleware, function(req, res){
+app.post('/editbatch', function(req, res){
 	var filter = req.body.filter;
 	filter.created_on = new Date(filter.created_on);
 	var batch = req.body.batch;
 	var object = JSON.parse(batch);
-	var id = object._id;
 	object.created_on = new Date(object.created_on);
 	if (req.user.role == 'creator'){
 		object.marketing_approved = false;
 		object.bc_approved = false;
 	}
-	delete object._id;
 	console.log(filter);
 	console.log(batch);
 	MongoClient.connect(url, function(err, db){
 		var collection = db.collection('batches');
-		collection.updateOne({"_id": new mongo.ObjectId(id)}, {$set:object}, function(err){
+		collection.updateOne(filter, {$set:object}, function(err){
 			res.send(err);
 			console.log(err);
 			db.close();
@@ -338,15 +302,12 @@ app.post('/login', function (req, res, next){
                 return next(err);
             }
             // users.push(user);
-            MongoClient.connect(userUrl, function(err, db){
-            	db.collection("localUsers").update({username: req.user.username}, {$set:{last_logged_in: new Date()}}, {upsert: true});
-            })
             console.log("Logged in");
             return res.redirect('/');
         })
     })(req, res, next);
 });
-app.post('/register', authenticatedMiddleware, function (req, res, next){
+app.post('/register', function (req, res, next){
     passport.authenticate('local-reg', function (err, user){
         if (err){
             console.log("error");
@@ -357,16 +318,16 @@ app.post('/register', authenticatedMiddleware, function (req, res, next){
             console.log("User already exists");
             return res.redirect('/signin');
         }
-        // req.logIn(user, function(err){
-            // if (err){
-            //     return next(err);
-            // }
-            // console.log("Logged in");
+        req.logIn(user, function(err){
+            if (err){
+                return next(err);
+            }
+            console.log("Logged in");
             return res.redirect('/');
-        // })
+        })
     })(req, res, next);
 });
-app.get('/logout', authenticatedMiddleware, function(req, res){
+app.get('/logout', function(req, res){
   var name = req.user.username;
   console.log("LOGGIN OUT " + req.user.username)
   req.logout();
@@ -374,19 +335,15 @@ app.get('/logout', authenticatedMiddleware, function(req, res){
   req.session.notice = "You have successfully been logged out " + name + "!";
 });
 
-app.post('/deleteUser', authenticatedMiddleware, function(req, res){
+app.post('/deleteUser', function(req, res){
 	var collection = "localUsers";
 	var filter = req.body.filter;
-	if (req.user.role == "admin"){
-		MongoClient.connect(userUrl, function(err, db){
-			db.collection(collection).remove(filter, function(){
-				res.send("Deleted");
-				db.close();
-			});
+	MongoClient.connect(userUrl, function(err, db){
+		db.collection(collection).remove(filter, function(){
+			res.send("Deleted");
+			db.close();
 		});
-	} else {
-		res.send("error");
-	}
+	});
 });
 
 app.post('/resetUserPassword', function(req, res){

@@ -77,6 +77,10 @@ function removeCarriage(data){
   return data.replace(/\r?\n|\r/g, "").replace(/\"/g, "").replace(",", "");
 }
 
+function removeSpace(data){
+  return data.replace(/\s/g, "");
+}
+
 Vue.filter('tabify', function(x){
   return x + 'tab';
 })
@@ -84,3 +88,7 @@ Vue.filter('tabify', function(x){
 Vue.filter('body', function(x){
   return x + 'body';
 })
+
+function formatDecimalPlaces(x, y){
+    return Number(x.replace(/[^0-9\.]/g, "")).toFixed(y);
+}

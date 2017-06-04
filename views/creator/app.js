@@ -22,7 +22,8 @@ var app = new Vue({
 		batches: batches,
 		user: user,
 		edit: false,
-		new_swift: {}
+		new_swift: {},
+		items: []
 	},
 	methods: {
 		// resetValue: function(view, key, value){
@@ -73,24 +74,35 @@ var app = new Vue({
 					var headers = lines[0].split(",");
 					headers = headers.map(removeCarriage);
 					headers = headers.map(normalize);
-					lines.shift();
-					for (var i = 0; i < lines.length; i++){
-						var obj = {};
-						var values = lines[i].split(",");
-						values = values.map(removeCarriage);
-						for (var j = 0; j < headers.length; j++){
-							obj[headers[j]] = values[j];
-							if (headers[j] == "standard_cost"){
-								if (values[j].includes(",")){
-									toastr.error("Error in format of standard cost for " + obj["sap_code"] + ".\n Please ensure that standard cost does not have a comma.");
-								}
-								if (!values[j].includes(".")){
-									toastr.error("Error in format of standard cost for " + obj["sap_code"] + 
-										".\n Please ensure that standard cost have two decimal points");
+					if (headers.includes("division") && headers.includes("signature") && headers.includes("category")){
+						lines.shift();
+						for (var i = 0; i < lines.length; i++){
+							var obj = {};
+							var values = lines[i].split(",");
+							values = values.map(removeCarriage);
+							for (var j = 0; j < headers.length; j++){
+								obj[headers[j]] = values[j];
+								if (headers[j] == "fob_price" || headers[j] == "freight_cost" || headers[j] == "royalty" || headers[j] == "stickering_cost" || headers[j] == 'customs'){
+									values[j] = values[j].replace(/\s/g, "");
+									if (values[j].includes(",")){
+										toastr.error("Error in format of " + headers[j] + " for " + obj["sap_code"] + ".\n Please ensure that standard cost does not have a comma.");
+									}
+									if (!values[j].includes(".")){
+										toastr.error("Error in format of  " + headers[j] + " for " + obj["sap_code"] + 
+											".\n Please ensure that " + headers[j] + " have two decimal points");
+									} else {
+										var numbers = values[j].split(".");
+										if (numbers[1].length != 2){
+											toastr.error("Error in format of " + headers[j] + " for " + obj["sap_code"] + 
+											".\n Please ensure that " + headers[j] + " have two decimal points");
+										}
+									}
 								}
 							}
+							vm.batch.items.push(obj);
 						}
-						vm.batch.items.push(obj);
+					} else {
+						toastr.error("Please ensure that you have division, signature, and category");
 					}
 					console.log(rawData);
 					var elem = document.getElementById("raw-data");
@@ -153,7 +165,8 @@ var app = new Vue({
 					data: {
 						filter: {
 							created_by: batch.created_by,
-							created_on: batch.created_on
+							created_on: batch.created_on,
+							_id: batch._id
 						}
 					}, 
 					success: function(){
@@ -198,6 +211,13 @@ var app = new Vue({
 					console.log("saved changes");
 				}
 			});
+		},
+		formatDecimal: function(batch_index, item_index, key){
+			var obj = batches[batch_index].items[item_index];
+			var decimal_keys = ["standard_cost", "fob_price", "freight_cost", "customs", "royalty", "stickering_cost", "srp", "margin", "vat", "list_price"];
+			if (decimal_keys.includes(key)){
+				obj[key] = formatDecimalPlaces(obj[key], 2);
+			}
 		}
 	}
 })
@@ -267,7 +287,7 @@ var createOutputData = function(batch, callback){
 						if (month < 10){
 							month = "0" + month;
 						}
-						obj[field.field] = day + "" +  month + date.getFullYear();
+						obj[field.field] = day + "." +  month + "." + date.getFullYear();
 					} else if (field.type == "default_field" && typeof field.value == 'string'){
 						obj[field.field] = field.value;
 					} else if (field.type == "filled_field"){
@@ -325,6 +345,9 @@ var createOutputData = function(batch, callback){
 						});
 					}
 					if (conditional_fields.length > 0){
+						if (viewOutputData.length == 0){
+							viewOutputData.push(obj);
+						}
 						viewOutputData.forEach(function(data_object){
 							conditional_fields.forEach(function(field){
 								if (data_object[field.field] == undefined){

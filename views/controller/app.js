@@ -164,6 +164,16 @@ var app = new Vue({
 		setBCApproved: function(index){
 			batches[index].bc_approved = true;
 			this.saveEdit(index);
+		},
+		computeStandardCost: function(batch_index, item_index, key){
+			var obj = batches[batch_index].items[item_index];
+			var decimal_keys = ["standard_cost", "fob_price", "freight_cost", "customs", "royalty", "stickering_cost", "srp", "margin", "vat", "list_price"];
+			if (decimal_keys.includes(key)){
+				obj[key] = formatDecimalPlaces(obj[key], 2);
+			}
+			if (key != 'standard_cost'){
+				batches[batch_index].items[item_index].standard_cost = Number(Math.round(Number(obj.fob_price) * Number(obj.conversion_rate) * (1 + (Number(obj.freight_cost) + Number(obj.customs) + Number(obj.royalty))/100) + Number(obj.stickering_cost)+'e2')+'e-2');
+			}
 		}
 	}
 })

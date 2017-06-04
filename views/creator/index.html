@@ -69,13 +69,14 @@
 					<th>Extracted On</th>
 					<th>Division</th>
 					<th>Signature</th>
+					<th>Category</th>
 					<th>Days Pending</th>
-					<th>Action</th>
+					<th class="col-md-2">Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(batch, index) in batches" v-bind:class="{pending: batch.extracted_on == ''}">
-					<td> {{index + 1}} <span class="glyphicon glyphicon-time" v-if="batch.extracted_on == ''"></span> </td>
+				<tr v-for="(batch, index) in batches" v-bind:class="{pending: Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) >= Number(2) && batch.extracted_by == undefined}">
+					<td> {{index + 1}} <span class="glyphicon glyphicon-time" v-if="Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) >= Number(2) && batch.extracted_by == undefined"></span> </td>
 					<td>{{batch.created_by}}</td>
 					<td>{{batch.created_on | displayDateInWordsWithTime}}</td>
 					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.marketing_approved == true"></span></td>
@@ -83,9 +84,10 @@
 					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
 					<td>{{batch.division}}</td>
 					<td>{{batch.signature}}</td>
+					<td>{{batch.category}}</td>
 					<td v-if="batch.extracted_on == ''">{{ Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) }}</td>
 					<td v-else>Extracted by: {{batch.extracted_by}}</td>
-					<td class="col-md-2">
+					<td>
 						<div class="btn-group" role="group">
 							<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="index | openModalHash">
 								<span class="glyphicon glyphicon-list"></span>
@@ -109,18 +111,26 @@
 		        <h4 class="modal-title" id="myModalLabel">Batch {{batch_index + 1}}</h4>
 		      </div>
 		      <div class="modal-body">
-		        <table class="table">
+		        <table class="table table-condensed table-dp">
 		        	<thead>
 		        		<tr v-for="(item, item_index) in batch.items" v-if="item_index == 0">
-		        			<th v-for="(value, key) in item">{{key | humanize}}</th>
+		        			<th v-for="key in ['div.', 'sig.', 'cat.', 'vendor_mat.', 'description', 'vendor', 'mat._type', 'mat._group', 'mpg1', 'COO', 'product_hierarchy', 'fob_price', 'fob_currency', 'budget_rate', 'freight (%)', 'customs (%)', 'royalty (%)', 'stickering_cost', 'currency', 'std_cost', 'srp', 'margin (%)', 'vat (%)', 'list_price']">{{key | humanize}}</th>
 		        		</tr>
 		        	</thead>
 		        	<tbody>
-		        		<tr v-for="item in batch.items">
-		        			<td v-for="(value, key) in item">
-		        				<p v-if="edit == false"> {{value}} </p>
-		        				<input class="form-control" v-if="edit==true && views[0].fields[key].creator_editable == true" type="text" :name="value" v-model="item[key]">
+		        		<tr v-for="(item, item_index) in batch.items">
+		        			<td v-for="key in ['division', 'signature', 'category', 'vendor_material_code', 'description', 'vendor', 'material_type', 'material_group', 'mpg1', 'country_of_origin', 'product_hierarchy', 'fob_price', 'fob_currency', 'conversion_rate', 'freight_cost', 'customs', 'royalty', 'stickering_cost', 'currency', 'standard_cost', 'srp', 'margin', 'vat', 'list_price']">
+		        				<p v-if="edit == false || views[0].fields[key].creator_editable == false"> {{item[key]}} </p>
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['vendor_material_code', 'vendor', 'material_type', 'material_group', 'mpg1', 'country_of_origin', 'fob_price', 'fob_currency', 'conversion_rate', 'freight_cost', 'customs', 'royalty', 'stickering_cost', 'currency'].includes(key) && item[key] != undefined" type="text" :name="item[key]" v-model="item[key]" :size="item[key].length">
+
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['product_hierarchy', 'description'].includes(key)" type="text" :name="item[key]" v-model="item[key]" :size="18">
+
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['standard_cost', 'list_price', 'margin', 'srp', 'vat'].includes(key)" type="text" :name="item[key]" v-model="item[key]" size="5">
 		        			</td>
+		        			<!-- <td v-for="(value, key) in item">
+		        				<p v-if="edit == false || views[0].fields[key].creator_editable == false"> {{value}} </p>
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true" type="text" :name="value" v-model="item[key]">
+		        			</td> -->
 		        		</tr>
 		        	</tbody>
 		        </table>
@@ -171,8 +181,8 @@
 				url: '/getbatches',
 				type: 'GET',
 				success: function(data){
-					data.forEach(function(batch){
-						batches.push(batch);
+					data.forEach(function(item){
+						batches.push(item);
 					});
 				}
 			});

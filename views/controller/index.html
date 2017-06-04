@@ -26,7 +26,7 @@
 					<th>BC Confirm</th>
 					<th>Extracted On</th>
 					<th>Division</th>
-					<th>Brand</th>
+					<th>Signature</th>
 					<th>Days Pending</th>
 					<th>Action</th>
 				</tr>
@@ -40,7 +40,7 @@
 					<td class="center"><span class="glyphicon glyphicon-ok" v-if="batch.bc_approved == true"></span></td>
 					<td>{{batch.extracted_on | displayDateInWordsWithTime}}</td>
 					<td>{{batch.division}}</td>
-					<td>{{batch.brand}}</td>
+					<td>{{batch.signature}}</td>
 					<td v-if="batch.extracted_on == ''">{{ Math.ceil(Math.abs((new Date()).getTime() - new Date(batch.created_on).getTime()) / (1000 * 3600 *24)) }}</td>
 					<td v-else>Extracted by: {{batch.extracted_by}}</td>
 					<td>
@@ -66,14 +66,24 @@
 		        <table class="table">
 		        	<thead>
 		        		<tr v-for="(item, item_index) in batch.items" v-if="item_index == 0">
-		        			<th v-for="(value, key) in item">{{key}}</th>
+		        			<th>SAP Code</th>
+		        			<th>Description</th>
+		        			<th v-for="(value, key) in item" v-if="views[0].fields[key].bc_editable == true">{{key}}</th>
 		        		</tr>
 		        	</thead>
 		        	<tbody>
-		        		<tr v-for="item in batch.items">
-		        			<td v-for="(value, key) in item">
+		        		<tr v-for="(item, item_index) in batch.items">
+		        			<td>
+		        				{{item.sap_code}}
+		        			</td>
+		        			<td>{{item.description}}</td>
+		        			<td v-for="(value, key) in item" v-if="views[0].fields[key].bc_editable == true">
 		        				<p v-if="edit == false || views[0].fields[key].bc_editable == false"> {{value}} </p>
-		        				<input class="form-control" v-if="edit==true && views[0].fields[key].bc_editable == true" type="text" :name="value" v-model="item[key]">
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['vendor_material_code', 'vendor', 'material_type', 'material_group', 'mpg1', 'country_of_origin', 'fob_price', 'fob_currency', 'conversion_rate', 'freight_cost', 'customs', 'royalty', 'stickering_cost', 'currency'].includes(key) && item[key] != undefined" type="text" :name="item[key]" v-model="item[key]" :size="item[key].length">
+
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['product_hierarchy', 'description'].includes(key)" type="text" :name="item[key]" v-model="item[key]" :size="18">
+
+		        				<input class="form-control" v-on:change="formatDecimal(batch_index, item_index, key)" v-if="edit==true && views[0].fields[key].creator_editable == true && ['standard_cost', 'list_price', 'margin', 'srp', 'vat'].includes(key)" type="text" :name="item[key]" v-model="item[key]" size="5">
 		        			</td>
 		        		</tr>
 		        	</tbody>
